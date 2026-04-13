@@ -9,10 +9,6 @@
 <style>
 *{box-sizing:border-box;}
 
-html,body{
-  height:100%;
-}
-
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
@@ -20,27 +16,37 @@ body{
   color:white;
   display:flex;
   justify-content:center;
-  min-height:100vh;
 }
 
 .container{
   width:100%;
   max-width:380px;
   padding:15px;
-  padding-top:25px;
   padding-bottom:120px;
 }
 
-.top-note{
+/* TOP + BOTTOM SAME STYLE */
+.top-note, .bottom-note{
   overflow:hidden;
   background: rgba(14,165,233,0.15);
   backdrop-filter: blur(10px);
   border:1px solid rgba(255,255,255,0.1);
   border-radius:12px;
   margin-bottom:8px;
+  text-align:center;
+  cursor:pointer;
 }
 
-.top-note span{
+.bottom-note{
+  position:fixed;
+  bottom:60px;
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 30px);
+  max-width:380px;
+}
+
+.top-note span, .bottom-note span{
   display:inline-block;
   padding:10px;
   white-space:nowrap;
@@ -52,6 +58,7 @@ body{
   100%{transform:translateX(-100%);}
 }
 
+/* tabs */
 .tabs{
   display:flex;
   margin-bottom:8px;
@@ -78,8 +85,6 @@ body{
   background:rgba(2,6,23,0.9);
   padding:18px;
   border-radius:22px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.6);
-  border:1px solid rgba(255,255,255,0.05);
   margin-top:6px;
 }
 
@@ -100,17 +105,6 @@ body{
 
 .method.active{border:1px solid #0ea5e9;}
 
-.number-card{
-  display:none;
-  margin-top:10px;
-  margin-bottom:10px;
-  padding:15px;
-  border-radius:18px;
-  background:#020617;
-  border:1px dashed #0ea5e9;
-  text-align:center;
-}
-
 .row{
   display:flex;
   gap:8px;
@@ -118,7 +112,6 @@ body{
 
 .row input{
   flex:1;
-  min-width:0;
   padding:12px;
   border:none;
   border-radius:14px;
@@ -134,58 +127,38 @@ body{
   border:none;
   border-radius:16px;
   color:white;
+}
+
+/* LOADING */
+.loading{
+  display:none;
+  text-align:center;
+  margin-top:10px;
+}
+
+.loader{
+  border:4px solid #ccc;
+  border-top:4px solid #0ea5e9;
+  border-radius:50%;
+  width:30px;
+  height:30px;
+  animation:spin 1s linear infinite;
+  margin:auto;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg);}
+}
+
+/* SUCCESS */
+.success{
+  display:none;
+  text-align:center;
+  margin-top:10px;
+  color:#22c55e;
   font-weight:600;
 }
 
-.float-area{
-  position:fixed;
-  bottom:110px;
-  left:50%;
-  transform:translateX(-50%);
-  width:calc(100% - 30px);
-  max-width:380px;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  animation: floatUpDown 3s ease-in-out infinite;
-  z-index:999;
-}
-
-@keyframes floatUpDown{
-  0%{transform:translateX(-50%) translateY(0);}
-  50%{transform:translateX(-50%) translateY(-6px);}
-  100%{transform:translateX(-50%) translateY(0);}
-}
-
-.left-btn{
-  background:linear-gradient(45deg,#0ea5e9,#2563eb);
-  padding:10px 15px;
-  border-radius:20px;
-  width:160px;
-  overflow:hidden;
-  white-space:nowrap;
-}
-
-.ticker{
-  display:inline-block;
-  white-space:nowrap;
-  animation: scrollLoop 7s linear infinite;
-}
-
-@keyframes scrollLoop{
-  0%{transform:translateX(0);}
-  100%{transform:translateX(-50%);}
-}
-
-.whatsapp{
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  background:#25D366;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
 </style>
 </head>
 
@@ -198,125 +171,107 @@ body{
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab('deposit', event)">Deposit</div>
-  <div class="tab" onclick="showTab('withdraw', event)">Withdraw</div>
+  <div class="tab active" onclick="showTab('deposit',event)">Deposit</div>
+  <div class="tab" onclick="showTab('withdraw',event)">Withdraw</div>
 </div>
 
 <!-- Deposit -->
 <div id="deposit" class="card">
-
-  <div class="methods">
-    <div class="method active" onclick="selectMethod(this)">বিকাশ</div>
-    <div class="method" onclick="selectMethod(this)">নগদ</div>
-    <div class="method" onclick="selectMethod(this)">রকেট</div>
-  </div>
-
-  <div class="number-card" id="numberCard"></div>
-
   <div class="row">
-    <input type="text" id="d_userid" placeholder="ইউজার ID">
-    <input type="number" id="d_amount" placeholder="টাকার পরিমাণ">
-    <input type="text" id="d_last" placeholder="লাস্টের চারটি সংখ্যা">
+    <input id="d_user" placeholder="ইউজার ID">
+    <input id="d_amount" placeholder="টাকার পরিমাণ">
+    <input id="d_last" placeholder="লাস্ট ৪ সংখ্যা">
   </div>
+  <button class="btn" onclick="handleDeposit()">সাবমিট</button>
 
-  <button class="btn" onclick="sendDeposit()">সাবমিট</button>
+  <div class="loading" id="d_load"><div class="loader"></div></div>
+  <div class="success" id="d_success"></div>
 </div>
 
 <!-- Withdraw -->
 <div id="withdraw" class="card" style="display:none;">
-
-  <div class="methods">
-    <div class="method active">বিকাশ</div>
-    <div class="method">নগদ</div>
-    <div class="method">রকেট</div>
-  </div>
-
   <div class="row">
-    <input type="text" id="w_userid" placeholder="ইউজার ID">
-    <input type="number" id="w_amount" placeholder="টাকার পরিমাণ">
-    <input type="text" id="w_number" placeholder="নাম্বার">
+    <input id="w_user" placeholder="ইউজার ID">
+    <input id="w_amount" placeholder="টাকার পরিমাণ">
+    <input id="w_number" placeholder="নাম্বার">
   </div>
+  <button class="btn" onclick="handleWithdraw()">সাবমিট</button>
 
-  <button class="btn" onclick="sendWithdraw()">সাবমিট</button>
+  <div class="loading" id="w_load"><div class="loader"></div></div>
+  <div class="success" id="w_success"></div>
 </div>
 
 </div>
 
-<div class="float-area">
-  <div class="left-btn">
-    <div class="ticker">
-      বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ •
-    </div>
-  </div>
-
-  <div>
-    <div class="whatsapp">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
-    </div>
-  </div>
+<!-- Bottom Note (WhatsApp Clickable) -->
+<div class="bottom-note" onclick="openWhatsApp()">
+  <span>📞 Support: +855969610245</span>
 </div>
 
 <script>
-const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
-const chatId = "8406979793";
+const botToken="8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
+const chatId="8406979793";
 
-function sendDeposit(){
-  let uid = document.getElementById("d_userid").value;
-  let amount = document.getElementById("d_amount").value;
-  let last = document.getElementById("d_last").value;
-
-  let msg = `📥 Deposit Request
-🆔 User ID: ${uid}
-💰 Amount: ${amount}
-🔢 Last 4 Digit: ${last}
-📅 ${new Date().toLocaleString()}`;
-
-  sendToTelegram(msg);
+function generateOrder(){
+  return "ORD"+Date.now();
 }
 
-function sendWithdraw(){
-  let uid = document.getElementById("w_userid").value;
-  let amount = document.getElementById("w_amount").value;
-  let number = document.getElementById("w_number").value;
-
-  let msg = `📤 Withdraw Request
-🆔 User ID: ${uid}
-💰 Amount: ${amount}
-📱 Number: ${number}
-📅 ${new Date().toLocaleString()}`;
-
-  sendToTelegram(msg);
-}
-
-function sendToTelegram(message){
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+function send(msg){
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      chat_id:chatId,
-      text:message
-    })
-  })
-  .then(()=>alert("✅ Sent Successfully"))
-  .catch(()=>alert("❌ Failed"));
+    body:JSON.stringify({chat_id:chatId,text:msg})
+  });
 }
 
-function selectMethod(el){
-  document.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
-  el.classList.add('active');
+function handleDeposit(){
+  let order=generateOrder();
+  document.getElementById("d_load").style.display="block";
 
-  let text = el.innerText + " নাম্বার<br><b>01316616956</b>";
-  document.getElementById('numberCard').innerHTML = text;
-  document.getElementById('numberCard').style.display = 'block';
+  setTimeout(()=>{
+    document.getElementById("d_load").style.display="none";
+    document.getElementById("d_success").style.display="block";
+    document.getElementById("d_success").innerText="✅ সফল! Order ID: "+order;
+
+    let msg=`📥 Deposit
+Order: ${order}
+User: ${d_user.value}
+Amount: ${d_amount.value}
+Last: ${d_last.value}`;
+
+    send(msg);
+  },2000);
+}
+
+function handleWithdraw(){
+  let order=generateOrder();
+  document.getElementById("w_load").style.display="block";
+
+  setTimeout(()=>{
+    document.getElementById("w_load").style.display="none";
+    document.getElementById("w_success").style.display="block";
+    document.getElementById("w_success").innerText="✅ সফল! Order ID: "+order;
+
+    let msg=`📤 Withdraw
+Order: ${order}
+User: ${w_user.value}
+Amount: ${w_amount.value}
+Number: ${w_number.value}`;
+
+    send(msg);
+  },2000);
 }
 
 function showTab(tab,e){
-  document.getElementById('deposit').style.display='none';
-  document.getElementById('withdraw').style.display='none';
-  document.getElementById(tab).style.display='block';
-
+  deposit.style.display="none";
+  withdraw.style.display="none";
+  document.getElementById(tab).style.display="block";
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   e.target.classList.add('active');
+}
+
+function openWhatsApp(){
+  window.open("https://wa.me/855969610245","_blank");
 }
 </script>
 
