@@ -11,7 +11,7 @@
 
 html,body{
   height:100%;
-  overflow-x:hidden; /* FIX OUTSIDE SCROLL */
+  overflow-x:hidden;
 }
 
 body{
@@ -29,10 +29,9 @@ body{
   padding:15px;
   padding-top:25px;
   padding-bottom:120px;
-  overflow:hidden; /* EXTRA SAFETY */
 }
 
-/* TOP SLIDER (UNCHANGED AS YOU SAID) */
+/* TOP */
 .top-note{
   overflow:hidden;
   background: rgba(14,165,233,0.15);
@@ -96,16 +95,14 @@ body{
 }
 .method.active{border:1px solid #0ea5e9;}
 
-/* INPUT FIX (NO OUTSIDE FLOW) */
+/* INPUT */
 .row{
   display:flex;
   gap:8px;
-  flex-wrap:wrap; /* IMPORTANT FIX */
 }
 .row input{
   flex:1;
   min-width:0;
-  width:100%;
   padding:14px;
   border-radius:16px;
   background:linear-gradient(145deg,#0f172a,#020617);
@@ -125,7 +122,7 @@ body{
   font-weight:600;
 }
 
-/* FLOAT AREA */
+/* FLOAT */
 .float-area{
   position:fixed;
   bottom:110px;
@@ -148,7 +145,7 @@ body{
   align-items:center;
 }
 
-/* BOTTOM BUTTONS (REPLACE SLIDER AREA) */
+/* BOTTOM BUTTONS (NEW) */
 .bottom-links{
   position:fixed;
   bottom:20px;
@@ -158,20 +155,18 @@ body{
   max-width:380px;
   display:flex;
   gap:6px;
-  justify-content:space-between;
 }
 
 .bottom-links a{
   flex:1;
-  text-decoration:none;
   text-align:center;
-  padding:10px 6px;
+  text-decoration:none;
+  padding:10px 5px;
   border-radius:12px;
   background:rgba(14,165,233,0.15);
   border:1px solid rgba(14,165,233,0.25);
   color:white;
   font-size:12px;
-  white-space:nowrap;
 }
 </style>
 </head>
@@ -180,7 +175,6 @@ body{
 
 <div class="container">
 
-<!-- TOP SLIDER (UNCHANGED) -->
 <div class="top-note">
   <span>⏳ অনুগ্রহ করে অপেক্ষা করুন, আপনার ডিপোজিট প্রক্রিয়াধীন...</span>
 </div>
@@ -239,11 +233,11 @@ body{
   </a>
 </div>
 
-<!-- BOTTOM LINKS (NEW) -->
+<!-- BOTTOM LINKS -->
 <div class="bottom-links">
-  <a href="https://bjwala.co" target="_blank">Bjwala</a>
-  <a href="https://9xbet9.live" target="_blank">9xbet</a>
-  <a href="https://velki247.live" target="_blank">Velki</a>
+  <a href="https://bjwala.co" target="_blank">Bjwala.co</a>
+  <a href="https://9xbet9.live" target="_blank">9xbet9.live</a>
+  <a href="https://velki247.live" target="_blank">Velki247.live</a>
 </div>
 
 <script>
@@ -258,7 +252,7 @@ function generateOrderId(){
   return "#" + (orderCounter++);
 }
 
-/* RESET */
+/* RESET ONLY ADDED */
 function resetDeposit(){
   d_userid.value="";
   d_amount.value="";
@@ -275,32 +269,35 @@ function resetWithdraw(){
 function sendDeposit(){
   let id = generateOrderId();
 
-  let msg = `📥 Deposit
-🆔 ${id}
-💳 ${selectedDeposit}
-👤 ${d_userid.value}
-💰 ${d_amount.value}
-🔢 ${d_last.value}`;
+  let msg = `📥 Deposit Request
+🆔 Order ID: ${id}
+💳 Method: ${selectedDeposit}
+👤 User ID: ${d_userid.value}
+💰 Amount: ${d_amount.value}
+🔢 Last 4 Digit: ${d_last.value}`;
 
   sendToTelegram(msg);
-  resetDeposit();
+
+  resetDeposit(); // ✅ CLEAR INPUT
 }
 
 /* WITHDRAW */
 function sendWithdraw(){
   let id = generateOrderId();
 
-  let msg = `📤 Withdraw
-🆔 ${id}
-💳 ${selectedWithdraw}
-👤 ${w_userid.value}
-💰 ${w_amount.value}
-📱 ${w_number.value}`;
+  let msg = `📤 Withdraw Request
+🆔 Order ID: ${id}
+💳 Method: ${selectedWithdraw}
+👤 User ID: ${w_userid.value}
+💰 Amount: ${w_amount.value}
+📱 Number: ${w_number.value}`;
 
   sendToTelegram(msg);
-  resetWithdraw();
+
+  resetWithdraw(); // ✅ CLEAR INPUT
 }
 
+/* TELEGRAM */
 function sendToTelegram(message){
   fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
     method:"POST",
@@ -322,6 +319,9 @@ function showTab(tab,e){
   deposit.style.display='none';
   withdraw.style.display='none';
   document.getElementById(tab).style.display='block';
+
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
 }
 </script>
 
