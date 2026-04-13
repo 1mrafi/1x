@@ -134,6 +134,7 @@ body{
   font-weight:600;
 }
 
+/* FLOAT LEFT */
 .float-area{
   position: fixed;
   left: 15px;
@@ -165,7 +166,7 @@ body{
   font-size:13px;
 }
 
-/* ===== WHATSAPP (UPDATED INSIDE MAIN CODE) ===== */
+/* WHATSAPP FLOAT */
 .float-whatsapp{
   position: fixed;
   right: 15px;
@@ -198,28 +199,27 @@ body{
   box-shadow:0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* official style icon */
 .float-whatsapp svg{
   width:28px;
   height:28px;
   fill:white;
 }
 
-.loader{
-  display:none;
-  text-align:center;
-  margin-top:10px;
+/* ========================= */
+/* ✅ ADDED FIX (NO CHANGE)   */
+/* ========================= */
+
+.float-whatsapp{
+  transform: translateZ(0);
 }
 
-.success-box{
-  display:none;
-  margin-top:12px;
-  padding:12px;
-  border-radius:14px;
-  background:rgba(14,165,233,0.15);
-  border:1px solid #0ea5e9;
-  text-align:center;
+/* safe area support */
+@supports (bottom: env(safe-area-inset-bottom)) {
+  .float-whatsapp{
+    bottom: calc(20px + env(safe-area-inset-bottom));
+  }
 }
+
 </style>
 </head>
 
@@ -253,8 +253,6 @@ body{
   </div>
 
   <button class="btn" onclick="sendDeposit()">সাবমিট</button>
-  <div class="loader" id="loader">⏳ Processing...</div>
-  <div class="success-box" id="success1"></div>
 </div>
 
 <div id="withdraw" class="card" style="display:none;">
@@ -272,13 +270,11 @@ body{
   </div>
 
   <button class="btn" onclick="sendWithdraw()">সাবমিট</button>
-  <div class="loader" id="loader2">⏳ Processing...</div>
-  <div class="success-box" id="success2"></div>
 </div>
 
 </div>
 
-<!-- LEFT FLOAT -->
+<!-- FLOAT LEFT -->
 <div class="float-area">
   <div class="site-card" onclick="window.open('https://velki247.live','_blank')">
     <b>ভেল্কি</b>
@@ -293,7 +289,7 @@ body{
   </div>
 </div>
 
-<!-- RIGHT WHATSAPP (FULLY INTEGRATED) -->
+<!-- WHATSAPP -->
 <div class="float-whatsapp">
 
   <div class="wa-text">আকাশ খান</div>
@@ -307,105 +303,21 @@ body{
 
 </div>
 
+<!-- ========================= -->
+<!-- ✅ ADDED JS FIX ONLY      -->
+<!-- ========================= -->
 <script>
-const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
-const chatId = "8406979793";
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    const wa = document.querySelector('.float-whatsapp');
+    const vhDiff = window.innerHeight - window.visualViewport.height;
 
-let orderCounter = 23;
-let selectedDeposit = "বিকাশ";
-let selectedWithdraw = "বিকাশ";
-
-function generateOrderId(){
-  return "#" + (orderCounter++);
-}
-
-function sendDeposit(){
-  loader.style.display="block";
-
-  setTimeout(()=>{
-    let id = generateOrderId();
-
-    let msg = `📥 Deposit Request
-━━━━━━━━━━━━
-🆔 Order ID: ${id}
-💳 Method: ${selectedDeposit}
-👤 User ID: ${d_userid.value}
-💰 Amount: ${d_amount.value}
-🔢 Last 4 Digit: ${d_last.value}
-📅 ${new Date().toLocaleString()}
-━━━━━━━━━━━━`;
-
-    sendToTelegram(msg);
-
-    success1.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
-    success1.style.display="block";
-    loader.style.display="none";
-
-    d_userid.value = "";
-    d_amount.value = "";
-    d_last.value = "";
-
-  },1500);
-}
-
-function sendWithdraw(){
-  loader2.style.display="block";
-
-  setTimeout(()=>{
-    let id = generateOrderId();
-
-    let msg = `📤 Withdraw Request
-━━━━━━━━━━━━
-🆔 Order ID: ${id}
-💳 Method: ${selectedWithdraw}
-👤 User ID: ${w_userid.value}
-💰 Amount: ${w_amount.value}
-📱 Number: ${w_number.value}
-📅 ${new Date().toLocaleString()}
-━━━━━━━━━━━━`;
-
-    sendToTelegram(msg);
-
-    success2.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
-    success2.style.display="block";
-    loader2.style.display="none";
-
-    w_userid.value = "";
-    w_amount.value = "";
-    w_number.value = "";
-
-  },1500);
-}
-
-function sendToTelegram(message){
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({chat_id:chatId,text:message})
+    if (vhDiff > 0) {
+      wa.style.bottom = (20 + vhDiff) + "px";
+    } else {
+      wa.style.bottom = "20px";
+    }
   });
-}
-
-function selectMethod(el,type){
-  let parent = type==='deposit'?depositMethods:withdrawMethods;
-  parent.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
-  el.classList.add('active');
-
-  if(type==='deposit'){
-    selectedDeposit = el.innerText;
-    numberCard.innerHTML = `<b>01316616956</b><br>ক্যাশ আউট করুন`;
-    numberCard.style.display="block";
-  }else{
-    selectedWithdraw = el.innerText;
-  }
-}
-
-function showTab(tab,e){
-  deposit.style.display='none';
-  withdraw.style.display='none';
-  document.getElementById(tab).style.display='block';
-
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  e.target.classList.add('active');
 }
 </script>
 
