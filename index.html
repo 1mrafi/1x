@@ -31,6 +31,7 @@ body{
   padding-bottom:120px;
 }
 
+/* TOP */
 .top-note{
   overflow:hidden;
   background: rgba(14,165,233,0.15);
@@ -49,6 +50,7 @@ body{
   100%{transform:translateX(-100%);}
 }
 
+/* TABS */
 .tabs{
   display:flex;
   margin-bottom:8px;
@@ -69,13 +71,15 @@ body{
   color:white;
 }
 
+/* CARD */
 .card{
   background:rgba(2,6,23,0.9);
-  padding:18px;
+  padding:20px;
   border-radius:22px;
-  margin-top:6px;
+  margin-top:10px;
 }
 
+/* METHODS */
 .methods{
   display:flex;
   gap:8px;
@@ -91,6 +95,7 @@ body{
 }
 .method.active{border:1px solid #0ea5e9;}
 
+/* NUMBER CARD */
 .number-card{
   display:none;
   margin-top:10px;
@@ -102,11 +107,11 @@ body{
   text-align:center;
   font-size:18px;
 }
-
 .number-card b{
   font-size:22px;
 }
 
+/* INPUT (VISIBLE FIX) */
 .row{
   display:flex;
   gap:8px;
@@ -114,13 +119,19 @@ body{
 .row input{
   flex:1;
   min-width:0;
-  padding:12px;
-  border:none;
-  border-radius:14px;
-  background:#020617;
+  padding:14px;
+  border-radius:16px;
+  background:linear-gradient(145deg,#0f172a,#020617);
+  border:1px solid rgba(14,165,233,0.3);
   color:white;
+  outline:none;
+  box-shadow:0 0 8px rgba(14,165,233,0.08);
+}
+.row input::placeholder{
+  color:#94a3b8;
 }
 
+/* BUTTON */
 .btn{
   width:100%;
   padding:14px;
@@ -132,6 +143,7 @@ body{
   font-weight:600;
 }
 
+/* FLOAT */
 .float-area{
   position:fixed;
   bottom:110px;
@@ -166,13 +178,14 @@ body{
   align-items:center;
 }
 
+/* LOADER */
 .loader{
   display:none;
   text-align:center;
   margin-top:10px;
 }
 
-/* SUCCESS BOX */
+/* SUCCESS */
 .success-box{
   display:none;
   margin-top:12px;
@@ -198,7 +211,7 @@ body{
   <div class="tab" onclick="showTab('withdraw', event)">Withdraw</div>
 </div>
 
-<!-- Deposit -->
+<!-- DEPOSIT -->
 <div id="deposit" class="card">
 
   <div class="methods" id="depositMethods">
@@ -212,7 +225,7 @@ body{
   <div class="row">
     <input type="text" id="d_userid" placeholder="ইউজার ID">
     <input type="number" id="d_amount" placeholder="টাকার পরিমাণ">
-    <input type="text" id="d_last" placeholder="লাস্টের চারটি সংখ্যা">
+    <input type="text" id="d_last" placeholder="লাস্ট ৪ ডিজিট">
   </div>
 
   <button class="btn" onclick="sendDeposit()">সাবমিট</button>
@@ -220,7 +233,7 @@ body{
   <div class="success-box" id="success1"></div>
 </div>
 
-<!-- Withdraw -->
+<!-- WITHDRAW -->
 <div id="withdraw" class="card" style="display:none;">
 
   <div class="methods" id="withdrawMethods">
@@ -242,6 +255,7 @@ body{
 
 </div>
 
+<!-- FLOAT -->
 <div class="float-area">
   <div class="left-btn">
     <span>বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ •</span>
@@ -266,18 +280,22 @@ function generateOrderId(){
   return "#" + (orderCounter++);
 }
 
+/* DEPOSIT */
 function sendDeposit(){
   loader.style.display="block";
 
   setTimeout(()=>{
     let id = generateOrderId();
 
-    let msg = `📥 Deposit
-🆔 ${id}
-Method: ${selectedDeposit}
-User: ${d_userid.value}
-Amount: ${d_amount.value}
-Last: ${d_last.value}`;
+    let msg = `📥 Deposit Request
+━━━━━━━━━━━━
+🆔 Order ID: ${id}
+💳 Method: ${selectedDeposit}
+👤 User ID: ${d_userid.value}
+💰 Amount: ${d_amount.value}
+🔢 Last 4 Digit: ${d_last.value}
+📅 ${new Date().toLocaleString()}
+━━━━━━━━━━━━`;
 
     sendToTelegram(msg);
 
@@ -287,18 +305,22 @@ Last: ${d_last.value}`;
   },1500);
 }
 
+/* WITHDRAW */
 function sendWithdraw(){
   loader2.style.display="block";
 
   setTimeout(()=>{
     let id = generateOrderId();
 
-    let msg = `📤 Withdraw
-🆔 ${id}
-Method: ${selectedWithdraw}
-User: ${w_userid.value}
-Amount: ${w_amount.value}
-Number: ${w_number.value}`;
+    let msg = `📤 Withdraw Request
+━━━━━━━━━━━━
+🆔 Order ID: ${id}
+💳 Method: ${selectedWithdraw}
+👤 User ID: ${w_userid.value}
+💰 Amount: ${w_amount.value}
+📱 Number: ${w_number.value}
+📅 ${new Date().toLocaleString()}
+━━━━━━━━━━━━`;
 
     sendToTelegram(msg);
 
@@ -308,6 +330,7 @@ Number: ${w_number.value}`;
   },1500);
 }
 
+/* TELEGRAM */
 function sendToTelegram(message){
   fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
     method:"POST",
@@ -316,6 +339,7 @@ function sendToTelegram(message){
   });
 }
 
+/* METHOD SELECT */
 function selectMethod(el,type){
   let parent = type==='deposit'?depositMethods:withdrawMethods;
   parent.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
@@ -330,6 +354,7 @@ function selectMethod(el,type){
   }
 }
 
+/* TAB */
 function showTab(tab,e){
   deposit.style.display='none';
   withdraw.style.display='none';
