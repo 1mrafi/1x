@@ -314,7 +314,6 @@ body{
   <div class="site-card" onclick="window.open('https://www.9xbet9.live/','_blank')"><b>9xBet</b></div>
 </div>
 
-<!-- ✅ UPDATED WHATSAPP -->
 <div class="whatsapp-float">
   <span>আকাশ খান</span>
   <a class="whatsapp-btn" href="https://wa.me/+855969610245" target="_blank">
@@ -327,7 +326,7 @@ body{
 
 <div class="success-modal" id="successModal">
   <div class="checkmark"></div>
-  <h3>successful !</h3>
+  <h3>Successful !</h3>
   <div>আপনার রিকুয়েস্ট সফল হয়েছে</div>
   <div class="order-id" id="orderId"></div>
 </div>
@@ -407,7 +406,17 @@ function selectMethod(el,type){
 
   if(type==='deposit'){
     selectedDeposit = el.innerText;
-    numberCard.innerHTML = `<b>01330035019</b><br>ক্যাশ আউট করুন`;
+
+    if(selectedDeposit === "বিকাশ"){
+      numberCard.innerHTML = `<b>01330035019</b><br>ক্যাশ আউট করুন`;
+    }
+    else if(selectedDeposit === "নগদ"){
+      numberCard.innerHTML = `<b>01330035019</b><br>ক্যাশ আউট করুন`;
+    }
+    else if(selectedDeposit === "রকেট"){
+      numberCard.innerHTML = `<b>দ্রুত আপডেট হয়ে যাবে </b><br>ক্যাশ আউট করুন`;
+    }
+
     numberCard.style.display="block";
   }else{
     selectedWithdraw = el.innerText;
@@ -425,4 +434,4 @@ function showTab(tab,e){
 </script>
 
 </body>
-</html>
+</html>ল
