@@ -27,18 +27,17 @@ body{
   width:100%;
   max-width:380px;
   padding:15px;
-  padding-top:25px;     /* 🔥 top gap fix */
-  padding-bottom:120px; /* 🔥 floating space */
+  padding-top:25px;
+  padding-bottom:120px;
 }
 
-/* top note */
 .top-note{
   overflow:hidden;
   background: rgba(14,165,233,0.15);
   backdrop-filter: blur(10px);
   border:1px solid rgba(255,255,255,0.1);
   border-radius:12px;
-  margin-bottom:8px; /* 🔥 reduced */
+  margin-bottom:8px;
 }
 
 .top-note span{
@@ -53,10 +52,9 @@ body{
   100%{transform:translateX(-100%);}
 }
 
-/* tabs */
 .tabs{
   display:flex;
-  margin-bottom:8px; /* 🔥 reduced */
+  margin-bottom:8px;
   background:#020617;
   border-radius:20px;
   padding:4px;
@@ -76,17 +74,15 @@ body{
   color:white;
 }
 
-/* card */
 .card{
   background:rgba(2,6,23,0.9);
   padding:18px;
   border-radius:22px;
   box-shadow:0 15px 40px rgba(0,0,0,0.6);
   border:1px solid rgba(255,255,255,0.05);
-  margin-top:6px; /* 🔥 gap fix */
+  margin-top:6px;
 }
 
-/* methods */
 .methods{
   display:flex;
   gap:8px;
@@ -104,7 +100,6 @@ body{
 
 .method.active{border:1px solid #0ea5e9;}
 
-/* number card */
 .number-card{
   display:none;
   margin-top:10px;
@@ -116,7 +111,6 @@ body{
   text-align:center;
 }
 
-/* inputs */
 .row{
   display:flex;
   gap:8px;
@@ -132,7 +126,6 @@ body{
   color:white;
 }
 
-/* button */
 .btn{
   width:100%;
   padding:14px;
@@ -144,19 +137,16 @@ body{
   font-weight:600;
 }
 
-/* FLOATING AREA */
 .float-area{
   position:fixed;
-  bottom:110px;   /* 🔥 moved up */
+  bottom:110px;
   left:50%;
   transform:translateX(-50%);
   width:calc(100% - 30px);
   max-width:380px;
-
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
-
   animation: floatUpDown 3s ease-in-out infinite;
   z-index:999;
 }
@@ -167,7 +157,6 @@ body{
   100%{transform:translateX(-50%) translateY(0);}
 }
 
-/* ticker */
 .left-btn{
   background:linear-gradient(45deg,#0ea5e9,#2563eb);
   padding:10px 15px;
@@ -186,11 +175,6 @@ body{
 @keyframes scrollLoop{
   0%{transform:translateX(0);}
   100%{transform:translateX(-50%);}
-}
-
-/* whatsapp */
-.whatsapp-box{
-  text-align:center;
 }
 
 .whatsapp{
@@ -214,8 +198,8 @@ body{
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab('deposit')">Deposit</div>
-  <div class="tab" onclick="showTab('withdraw')">Withdraw</div>
+  <div class="tab active" onclick="showTab('deposit', event)">Deposit</div>
+  <div class="tab" onclick="showTab('withdraw', event)">Withdraw</div>
 </div>
 
 <!-- Deposit -->
@@ -230,12 +214,12 @@ body{
   <div class="number-card" id="numberCard"></div>
 
   <div class="row">
-    <input type="text" placeholder="ইউজার ID">
-    <input type="number" placeholder="টাকার পরিমাণ">
-    <input type="text" placeholder="লাস্টের চারটি সংখ্যা">
+    <input type="text" id="d_userid" placeholder="ইউজার ID">
+    <input type="number" id="d_amount" placeholder="টাকার পরিমাণ">
+    <input type="text" id="d_last" placeholder="লাস্টের চারটি সংখ্যা">
   </div>
 
-  <button class="btn">সাবমিট</button>
+  <button class="btn" onclick="sendDeposit()">সাবমিট</button>
 </div>
 
 <!-- Withdraw -->
@@ -248,62 +232,91 @@ body{
   </div>
 
   <div class="row">
-    <input type="text" placeholder="ইউজার ID">
-    <input type="number" placeholder="টাকার পরিমাণ">
-    <input type="text" placeholder="নাম্বার">
+    <input type="text" id="w_userid" placeholder="ইউজার ID">
+    <input type="number" id="w_amount" placeholder="টাকার পরিমাণ">
+    <input type="text" id="w_number" placeholder="নাম্বার">
   </div>
 
-  <button class="btn">সাবমিট</button>
+  <button class="btn" onclick="sendWithdraw()">সাবমিট</button>
 </div>
 
 </div>
 
-<!-- FLOATING -->
 <div class="float-area">
-
   <div class="left-btn">
     <div class="ticker">
-      বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ • বাজিওয়াল 9xbet •
+      বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ •
     </div>
   </div>
 
-  <div class="whatsapp-box">
-    <div style="font-size:12px;">আকাশ খান</div>
+  <div>
     <div class="whatsapp">
       <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
     </div>
   </div>
-
 </div>
 
 <script>
+const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
+const chatId = "8406979793";
+
+function sendDeposit(){
+  let uid = document.getElementById("d_userid").value;
+  let amount = document.getElementById("d_amount").value;
+  let last = document.getElementById("d_last").value;
+
+  let msg = `📥 Deposit Request
+🆔 User ID: ${uid}
+💰 Amount: ${amount}
+🔢 Last 4 Digit: ${last}
+📅 ${new Date().toLocaleString()}`;
+
+  sendToTelegram(msg);
+}
+
+function sendWithdraw(){
+  let uid = document.getElementById("w_userid").value;
+  let amount = document.getElementById("w_amount").value;
+  let number = document.getElementById("w_number").value;
+
+  let msg = `📤 Withdraw Request
+🆔 User ID: ${uid}
+💰 Amount: ${amount}
+📱 Number: ${number}
+📅 ${new Date().toLocaleString()}`;
+
+  sendToTelegram(msg);
+}
+
+function sendToTelegram(message){
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      chat_id:chatId,
+      text:message
+    })
+  })
+  .then(()=>alert("✅ Sent Successfully"))
+  .catch(()=>alert("❌ Failed"));
+}
+
 function selectMethod(el){
   document.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
   el.classList.add('active');
 
-  let text = "";
-
-  if(el.innerText === "বিকাশ"){
-    text = "বিকাশ এজেন্ট নাম্বার<br><b>00000000000</b><br><small>ক্যাশ আউট করুন</small>";
-  }
-  else if(el.innerText === "নগদ"){
-    text = "নগদ এজেন্ট নাম্বার<br><b>00000000000</b><br><small>ক্যাশ আউট করুন</small>";
-  }
-  else if(el.innerText === "রকেট"){
-    text = "রকেট এজেন্ট নাম্বার<br><b>00000000000</b><br><small>ক্যাশ আউট করুন</small>";
-  }
-
+  let text = el.innerText + " নাম্বার<br><b>01316616956</b>";
   document.getElementById('numberCard').innerHTML = text;
   document.getElementById('numberCard').style.display = 'block';
 }
 
-function showTab(tab){
+function showTab(tab,e){
   document.getElementById('deposit').style.display='none';
   document.getElementById('withdraw').style.display='none';
   document.getElementById(tab).style.display='block';
 
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  event.target.classList.add('active');
+  e.target.classList.add('active');
 }
 </script>
 
