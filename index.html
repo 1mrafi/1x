@@ -28,7 +28,7 @@ body{
   max-width:380px;
   padding:15px;
   padding-top:25px;
-  padding-bottom:120px;
+  padding-bottom:140px;
 }
 
 /* TOP */
@@ -95,6 +95,22 @@ body{
 }
 .method.active{border:1px solid #0ea5e9;}
 
+/* NUMBER CARD */
+.number-card{
+  display:none;
+  margin-top:10px;
+  margin-bottom:10px;
+  padding:15px;
+  border-radius:18px;
+  background:#020617;
+  border:1px dashed #0ea5e9;
+  text-align:center;
+  font-size:18px;
+}
+.number-card b{
+  font-size:22px;
+}
+
 /* INPUT */
 .row{
   display:flex;
@@ -108,6 +124,7 @@ body{
   background:linear-gradient(145deg,#0f172a,#020617);
   border:1px solid rgba(14,165,233,0.3);
   color:white;
+  outline:none;
 }
 
 /* BUTTON */
@@ -122,51 +139,49 @@ body{
   font-weight:600;
 }
 
-/* FLOAT */
-.float-area{
-  position:fixed;
-  bottom:110px;
-  left:50%;
-  transform:translateX(-50%);
-  width:calc(100% - 30px);
-  max-width:380px;
-  display:flex;
-  justify-content:space-between;
+/* LOADER */
+.loader{
+  display:none;
+  text-align:center;
+  margin-top:10px;
 }
 
-/* WHATSAPP */
-.whatsapp{
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  background:#25D366;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+/* SUCCESS */
+.success-box{
+  display:none;
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background:rgba(14,165,233,0.15);
+  border:1px solid #0ea5e9;
+  text-align:center;
 }
 
 /* BOTTOM BUTTONS (NEW) */
 .bottom-links{
   position:fixed;
-  bottom:20px;
+  bottom:10px;
   left:50%;
   transform:translateX(-50%);
   width:calc(100% - 30px);
   max-width:380px;
   display:flex;
-  gap:6px;
+  flex-direction:column;
+  gap:10px;
 }
 
 .bottom-links a{
-  flex:1;
-  text-align:center;
   text-decoration:none;
-  padding:10px 5px;
-  border-radius:12px;
-  background:rgba(14,165,233,0.15);
-  border:1px solid rgba(14,165,233,0.25);
+}
+
+.bottom-btn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  text-align:center;
+  font-weight:600;
   color:white;
-  font-size:12px;
+  background:linear-gradient(45deg,#0ea5e9,#2563eb);
 }
 </style>
 </head>
@@ -193,6 +208,8 @@ body{
     <div class="method" onclick="selectMethod(this,'deposit')">রকেট</div>
   </div>
 
+  <div class="number-card" id="numberCard"></div>
+
   <div class="row">
     <input type="text" id="d_userid" placeholder="ইউজার ID">
     <input type="number" id="d_amount" placeholder="টাকার পরিমাণ">
@@ -200,6 +217,8 @@ body{
   </div>
 
   <button class="btn" onclick="sendDeposit()">সাবমিট</button>
+  <div class="loader" id="loader">⏳ Processing...</div>
+  <div class="success-box" id="success1"></div>
 </div>
 
 <!-- WITHDRAW -->
@@ -218,30 +237,29 @@ body{
   </div>
 
   <button class="btn" onclick="sendWithdraw()">সাবমিট</button>
+  <div class="loader" id="loader2">⏳ Processing...</div>
+  <div class="success-box" id="success2"></div>
 </div>
 
 </div>
 
-<!-- FLOAT -->
-<div class="float-area">
-  <div></div>
+<!-- NEW BOTTOM LINKS -->
+<div class="bottom-links">
+  <a href="https://bjwala.co" target="_blank">
+    <div class="bottom-btn">BJWALA</div>
+  </a>
 
-  <a href="https://wa.me/+855969610245" target="_blank">
-    <div class="whatsapp">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
-    </div>
+  <a href="https://9xbet9.live" target="_blank">
+    <div class="bottom-btn">9XBET</div>
+  </a>
+
+  <a href="https://velki247.live" target="_blank">
+    <div class="bottom-btn">VELKI247</div>
   </a>
 </div>
 
-<!-- BOTTOM LINKS -->
-<div class="bottom-links">
-  <a href="https://bjwala.co" target="_blank">Bjwala.co</a>
-  <a href="https://9xbet9.live" target="_blank">9xbet9.live</a>
-  <a href="https://velki247.live" target="_blank">Velki247.live</a>
-</div>
-
 <script>
-const botToken = "8216213984:AAFCOQsGouXgnit2vKWR6Rv8-VonSYL7_irk";
+const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
 const chatId = "8406979793";
 
 let orderCounter = 23;
@@ -252,49 +270,64 @@ function generateOrderId(){
   return "#" + (orderCounter++);
 }
 
-/* RESET ONLY ADDED */
-function resetDeposit(){
-  d_userid.value="";
-  d_amount.value="";
-  d_last.value="";
-}
-
-function resetWithdraw(){
-  w_userid.value="";
-  w_amount.value="";
-  w_number.value="";
-}
-
 /* DEPOSIT */
 function sendDeposit(){
-  let id = generateOrderId();
+  loader.style.display="block";
 
-  let msg = `📥 Deposit Request
+  setTimeout(()=>{
+    let id = generateOrderId();
+
+    let msg = `📥 Deposit Request
+━━━━━━━━━━━━
 🆔 Order ID: ${id}
 💳 Method: ${selectedDeposit}
 👤 User ID: ${d_userid.value}
 💰 Amount: ${d_amount.value}
-🔢 Last 4 Digit: ${d_last.value}`;
+🔢 Last 4 Digit: ${d_last.value}
+📅 ${new Date().toLocaleString()}
+━━━━━━━━━━━━`;
 
-  sendToTelegram(msg);
+    sendToTelegram(msg);
 
-  resetDeposit(); // ✅ CLEAR INPUT
+    success1.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
+    success1.style.display="block";
+    loader.style.display="none";
+
+    // RESET
+    d_userid.value="";
+    d_amount.value="";
+    d_last.value="";
+  },1500);
 }
 
 /* WITHDRAW */
 function sendWithdraw(){
-  let id = generateOrderId();
+  loader2.style.display="block";
 
-  let msg = `📤 Withdraw Request
+  setTimeout(()=>{
+    let id = generateOrderId();
+
+    let msg = `📤 Withdraw Request
+━━━━━━━━━━━━
 🆔 Order ID: ${id}
 💳 Method: ${selectedWithdraw}
 👤 User ID: ${w_userid.value}
 💰 Amount: ${w_amount.value}
-📱 Number: ${w_number.value}`;
+📱 Number: ${w_number.value}
+📅 ${new Date().toLocaleString()}
+━━━━━━━━━━━━`;
 
-  sendToTelegram(msg);
+    sendToTelegram(msg);
 
-  resetWithdraw(); // ✅ CLEAR INPUT
+    success2.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
+    success2.style.display="block";
+    loader2.style.display="none";
+
+    // RESET
+    w_userid.value="";
+    w_amount.value="";
+    w_number.value="";
+  },1500);
 }
 
 /* TELEGRAM */
@@ -306,15 +339,22 @@ function sendToTelegram(message){
   });
 }
 
+/* METHOD SELECT */
 function selectMethod(el,type){
   let parent = type==='deposit'?depositMethods:withdrawMethods;
   parent.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
   el.classList.add('active');
 
-  if(type==='deposit') selectedDeposit = el.innerText;
-  else selectedWithdraw = el.innerText;
+  if(type==='deposit'){
+    selectedDeposit = el.innerText;
+    numberCard.innerHTML = `<b>01316616956</b><br>ক্যাশ আউট করুন`;
+    numberCard.style.display="block";
+  }else{
+    selectedWithdraw = el.innerText;
+  }
 }
 
+/* TAB */
 function showTab(tab,e){
   deposit.style.display='none';
   withdraw.style.display='none';
