@@ -11,6 +11,7 @@
 
 html,body{
   height:100%;
+  height:100dvh;
   overflow:hidden;
 }
 
@@ -30,6 +31,7 @@ body{
   padding-top:25px;
   padding-bottom:120px;
   height:100vh;
+  height:100dvh;
   overflow-y:auto;
 }
 
@@ -164,10 +166,6 @@ body{
   font-size:13px;
 }
 
-/* ========================= */
-/* 🔥 PREMIUM SUCCESS MODAL */
-/* ========================= */
-
 .success-modal{
   position:fixed;
   top:50%;
@@ -218,10 +216,7 @@ body{
   color:#94a3b8;
 }
 
-/* ========================= */
-/* 🔥 WHATSAPP FLOAT ICON (NEW) */
-/* ========================= */
-
+/* WhatsApp unchanged */
 .whatsapp-float{
   position:fixed;
   right:15px;
@@ -260,7 +255,6 @@ body{
   height:30px;
   fill:white;
 }
-
 </style>
 </head>
 
@@ -322,7 +316,7 @@ body{
   <div class="site-card" onclick="window.open('https://www.9xbet9.live/','_blank')"><b>9xBet</b></div>
 </div>
 
-<!-- WHATSAPP FLOAT RIGHT (NEW) -->
+<!-- WHATSAPP -->
 <div class="whatsapp-float">
   <span>আকাশ খান</span>
   <a class="whatsapp-btn" href="https://wa.me/+855969610245" target="_blank">
@@ -362,6 +356,12 @@ function showSuccess(id){
   },3000);
 }
 
+/* ✅ FIXED TELEGRAM SEND */
+function sendToTelegram(message){
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+  fetch(url).catch(err=>console.log(err));
+}
+
 function sendDeposit(){
   let id = generateOrderId();
 
@@ -376,7 +376,6 @@ function sendDeposit(){
 ━━━━━━━━━━━━`;
 
   sendToTelegram(msg);
-
   showSuccess(id);
 }
 
@@ -394,16 +393,7 @@ function sendWithdraw(){
 ━━━━━━━━━━━━`;
 
   sendToTelegram(msg);
-
   showSuccess(id);
-}
-
-function sendToTelegram(message){
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({chat_id:chatId,text:message})
-  });
 }
 
 function selectMethod(el,type){
