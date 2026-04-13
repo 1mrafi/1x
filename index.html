@@ -309,14 +309,12 @@ body{
 
 </div>
 
-<!-- FLOAT LEFT -->
 <div class="float-area">
   <div class="site-card" onclick="window.open('https://velki247.live','_blank')"><b>ভেল্কি</b></div>
   <div class="site-card" onclick="window.open('https://www.bjwala.co','_blank')"><b>বাজিওয়ালা</b></div>
   <div class="site-card" onclick="window.open('https://www.9xbet9.live/','_blank')"><b>9xBet</b></div>
 </div>
 
-<!-- WHATSAPP -->
 <div class="whatsapp-float">
   <span>আকাশ খান</span>
   <a class="whatsapp-btn" href="https://wa.me/+855969610245" target="_blank">
@@ -327,7 +325,6 @@ body{
   </a>
 </div>
 
-<!-- SUCCESS MODAL -->
 <div class="success-modal" id="successModal">
   <div class="checkmark"></div>
   <h3>সাকসেসফুল!</h3>
@@ -336,7 +333,7 @@ body{
 </div>
 
 <script>
-const botToken = "8216213984:AAFQsCOgouXgnit2vKR6Rv8-VonSYL7_irk";
+const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
 const chatId = "8406979793";
 
 let orderCounter = 23;
@@ -356,7 +353,6 @@ function showSuccess(id){
   },3000);
 }
 
-/* ✅ FIXED TELEGRAM SEND */
 function sendToTelegram(message){
   const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
   fetch(url).catch(err=>console.log(err));
@@ -377,6 +373,11 @@ function sendDeposit(){
 
   sendToTelegram(msg);
   showSuccess(id);
+
+  // reset
+  d_userid.value = "";
+  d_amount.value = "";
+  d_last.value = "";
 }
 
 function sendWithdraw(){
@@ -394,6 +395,11 @@ function sendWithdraw(){
 
   sendToTelegram(msg);
   showSuccess(id);
+
+  // reset
+  w_userid.value = "";
+  w_amount.value = "";
+  w_number.value = "";
 }
 
 function selectMethod(el,type){
