@@ -9,7 +9,10 @@
 <style>
 *{box-sizing:border-box;}
 
-html,body{height:100%;}
+html,body{
+  height:100%;
+  overflow-x:hidden; /* FIX SIDE SCROLL */
+}
 
 body{
   margin:0;
@@ -25,7 +28,7 @@ body{
   max-width:380px;
   padding:15px;
   padding-top:25px;
-  padding-bottom:120px;
+  padding-bottom:110px;
 }
 
 /* TOP NOTE */
@@ -35,6 +38,7 @@ body{
   border-radius:12px;
   margin-bottom:8px;
 }
+
 .top-note span{
   display:inline-block;
   padding:10px;
@@ -55,6 +59,7 @@ body{
   border-radius:20px;
   padding:4px;
 }
+
 .tab{
   flex:1;
   padding:12px;
@@ -63,6 +68,7 @@ body{
   cursor:pointer;
   color:#94a3b8;
 }
+
 .tab.active{
   background:linear-gradient(45deg,#0ea5e9,#2563eb);
   color:white;
@@ -82,6 +88,7 @@ body{
   gap:8px;
   margin-bottom:12px;
 }
+
 .method{
   flex:1;
   padding:10px;
@@ -90,11 +97,13 @@ body{
   border-radius:14px;
   cursor:pointer;
 }
+
 .method.active{border:1px solid #0ea5e9;}
 
 .number-card{
   display:none;
   margin-top:10px;
+  margin-bottom:10px;
   padding:15px;
   border-radius:18px;
   background:#020617;
@@ -107,8 +116,10 @@ body{
   display:flex;
   gap:8px;
 }
+
 .row input{
   flex:1;
+  min-width:0;
   padding:12px;
   border:none;
   border-radius:14px;
@@ -116,6 +127,7 @@ body{
   color:white;
 }
 
+/* BUTTON */
 .btn{
   width:100%;
   padding:14px;
@@ -124,6 +136,7 @@ body{
   border:none;
   border-radius:16px;
   color:white;
+  font-weight:600;
 }
 
 /* FLOAT AREA */
@@ -137,15 +150,17 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
+  z-index:999;
 }
 
-/* LEFT SCROLL (UPDATED SAME AS TOP) */
+/* LEFT BUTTON (NOW SAME AS TOP NOTE) */
 .left-btn{
   overflow:hidden;
   background: rgba(14,165,233,0.15);
   border-radius:12px;
-  width:200px;
+  width:160px;
 }
+
 .left-btn span{
   display:inline-block;
   padding:10px;
@@ -165,7 +180,7 @@ body{
   cursor:pointer;
 }
 
-/* LOADING */
+/* LOADER */
 .loader{
   display:none;
   text-align:center;
@@ -210,6 +225,13 @@ body{
 
 <!-- Withdraw -->
 <div id="withdraw" class="card" style="display:none;">
+
+  <div class="methods">
+    <div class="method active">বিকাশ</div>
+    <div class="method">নগদ</div>
+    <div class="method">রকেট</div>
+  </div>
+
   <div class="row">
     <input type="text" id="w_userid" placeholder="ইউজার ID">
     <input type="number" id="w_amount" placeholder="টাকার পরিমাণ">
@@ -224,20 +246,23 @@ body{
 
 <!-- FLOAT -->
 <div class="float-area">
+
   <div class="left-btn">
     <span>বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ •</span>
   </div>
 
+  <!-- WHATSAPP LINK -->
   <a href="https://wa.me/+855969610245" target="_blank">
     <div class="whatsapp">
       <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
     </div>
   </a>
+
 </div>
 
 <script>
-const botToken = "YOUR_BOT_TOKEN";
-const chatId = "YOUR_CHAT_ID";
+const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
+const chatId = "8406979793";
 
 let orderCounter = 23;
 
@@ -259,9 +284,10 @@ function sendDeposit(){
 📅 ${new Date().toLocaleString()}`;
 
     sendToTelegram(msg);
-    alert("✅ Order Placed\nOrder ID: " + orderId);
+
+    alert("Order ID: " + orderId);
     document.getElementById("loader").style.display="none";
-  },2000);
+  },1500);
 }
 
 function sendWithdraw(){
@@ -278,9 +304,10 @@ function sendWithdraw(){
 📅 ${new Date().toLocaleString()}`;
 
     sendToTelegram(msg);
-    alert("✅ Withdraw Placed\nOrder ID: " + orderId);
+
+    alert("Order ID: " + orderId);
     document.getElementById("loader2").style.display="none";
-  },2000);
+  },1500);
 }
 
 function sendToTelegram(message){
@@ -291,7 +318,10 @@ function sendToTelegram(message){
       chat_id:chatId,
       text:message
     })
-  });
+  })
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.log(err));
 }
 
 function selectMethod(el){
