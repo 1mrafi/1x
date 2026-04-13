@@ -31,13 +31,13 @@ body{
   padding-bottom:120px;
 }
 
-/* LINK CARDS (REPLACED TOP NOTICE) */
+/* TOP CARDS (REPLACE SLIDER AREA ONLY) */
 .link-card{
   background: rgba(14,165,233,0.15);
   border:1px solid rgba(14,165,233,0.25);
-  padding:12px;
-  border-radius:14px;
-  margin-bottom:8px;
+  padding:10px;
+  border-radius:12px;
+  margin-bottom:6px;
   text-align:center;
 }
 
@@ -98,7 +98,6 @@ body{
   background:linear-gradient(145deg,#0f172a,#020617);
   border:1px solid rgba(14,165,233,0.3);
   color:white;
-  outline:none;
 }
 
 /* BUTTON */
@@ -113,7 +112,7 @@ body{
   font-weight:600;
 }
 
-/* FLOAT AREA */
+/* FLOAT */
 .float-area{
   position:fixed;
   bottom:110px;
@@ -125,7 +124,7 @@ body{
   justify-content:space-between;
 }
 
-/* WHATSAPP FLOAT ANIMATION */
+/* WHATSAPP */
 .whatsapp{
   width:60px;
   height:60px;
@@ -167,7 +166,7 @@ body{
 
 <div class="container">
 
-<!-- LINKS -->
+<!-- SLIDER REPLACED BY 3 CARDS (SAME POSITION) -->
 <div class="link-card">bjwala.co</div>
 <div class="link-card">9xbet9.live</div>
 <div class="link-card">velki247.live</div>
@@ -231,7 +230,7 @@ body{
 </div>
 
 <script>
-const botToken = "8216213984:AAFCOQsGouXgnit2vR8-VonSYL7_irk";
+const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
 const chatId = "8406979793";
 
 let orderCounter = 23;
@@ -242,7 +241,7 @@ function generateOrderId(){
   return "#" + (orderCounter++);
 }
 
-/* RESET FUNCTION */
+/* RESET INPUTS */
 function resetDeposit(){
   d_userid.value="";
   d_amount.value="";
@@ -275,7 +274,7 @@ function sendDeposit(){
     success1.style.display="block";
     loader.style.display="none";
 
-    resetDeposit(); // ✅ FIX
+    resetDeposit(); // ✅ CLEAR INPUT
   },1500);
 }
 
@@ -299,10 +298,11 @@ function sendWithdraw(){
     success2.style.display="block";
     loader2.style.display="none";
 
-    resetWithdraw(); // ✅ FIX
+    resetWithdraw(); // ✅ CLEAR INPUT
   },1500);
 }
 
+/* TELEGRAM */
 function sendToTelegram(message){
   fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
     method:"POST",
@@ -311,6 +311,7 @@ function sendToTelegram(message){
   });
 }
 
+/* METHOD SELECT */
 function selectMethod(el,type){
   let parent = type==='deposit'?depositMethods:withdrawMethods;
   parent.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
@@ -323,6 +324,7 @@ function selectMethod(el,type){
   }
 }
 
+/* TAB */
 function showTab(tab,e){
   deposit.style.display='none';
   withdraw.style.display='none';
