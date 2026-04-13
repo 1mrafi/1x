@@ -216,44 +216,43 @@ body{
   color:#94a3b8;
 }
 
-/* WhatsApp unchanged */
-.whatsapp-float{
-  position:fixed;
-  right:15px;
-  bottom:20px;
-  z-index:99999;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
+/* WhatsApp */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 70px;
+    right: 40px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+.whatsapp-float:hover {
+    background-color: #128c7e;
 }
 
-.whatsapp-float span{
-  font-size:12px;
-  color:white;
-  background:rgba(0,0,0,0.3);
-  padding:4px 8px;
-  border-radius:10px;
-  backdrop-filter: blur(6px);
+/* ✅ ONLY UPDATED */
+.wa-label{
+    position: fixed;
+    right: 25px;
+    bottom: 140px;
+    font-size: 16px;
+    font-weight: 900;
+    white-space: nowrap;
+    width: max-content;
+    display: inline-block;
+    text-align: center;
+    color: white;
 }
 
-.whatsapp-btn{
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  background:#25D366;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  box-shadow:0 0 15px rgba(37,211,102,0.5);
-  text-decoration:none;
-}
-
-.whatsapp-btn svg{
-  width:30px;
-  height:30px;
-}
 </style>
 </head>
 
@@ -262,7 +261,7 @@ body{
 <div class="container">
 
 <div class="top-note">
-  <span>⏳ অনুগ্রহ করে অপেক্ষা করুন, আপনার ডিপোজিট প্রক্রিয়াধীন...</span>
+  <span>🔥নোটিশ🔥 : যে কোনো সমস্যায় হোয়াটসঅ্যাপে SMS দিন <b>আকাশ খান</b>।</span>
 </div>
 
 <div class="tabs">
@@ -290,7 +289,6 @@ body{
 </div>
 
 <div id="withdraw" class="card" style="display:none;">
-
   <div class="methods" id="withdrawMethods">
     <div class="method active" onclick="selectMethod(this,'withdraw')">বিকাশ</div>
     <div class="method" onclick="selectMethod(this,'withdraw')">নগদ</div>
@@ -314,15 +312,13 @@ body{
   <div class="site-card" onclick="window.open('https://www.9xbet9.live/','_blank')"><b>9xBet</b></div>
 </div>
 
-<div class="whatsapp-float">
-  <span>আকাশ খান</span>
-  <a class="whatsapp-btn" href="https://wa.me/+855969610245" target="_blank">
-    <svg viewBox="0 0 32 32">
-      <circle cx="16" cy="16" r="16" fill="#25D366"/>
-      <path fill="#fff" d="M23.47 18.27c-.37-.18-2.18-1.07-2.52-1.19-.34-.12-.59-.18-.84.18-.25.37-.96 1.19-1.18 1.43-.22.25-.44.28-.81.09-.37-.18-1.56-.57-2.97-1.82-1.1-.98-1.85-2.18-2.07-2.55-.22-.37-.02-.57.17-.75.17-.17.37-.44.55-.66.18-.22.25-.37.37-.62.12-.25.06-.46-.03-.65-.09-.18-.84-2.03-1.15-2.78-.3-.73-.61-.63-.84-.64-.22-.01-.46-.01-.71-.01-.25 0-.65.09-.99.46-.34.37-1.3 1.27-1.3 3.09s1.33 3.58 1.52 3.83c.18.25 2.63 4.02 6.37 5.64.89.38 1.58.61 2.12.78.89.28 1.7.24 2.34.15.71-.11 2.18-.89 2.49-1.75.31-.86.31-1.6.22-1.75-.09-.15-.34-.25-.71-.43z"/>
-    </svg>
-  </a>
-</div>
+<div class="wa-label"><b>আকাশ খান</b></div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<a href="https://wa.me/855969610245?text=Hello" class="whatsapp-float" target="_blank">
+    <i class="fa fa-whatsapp"></i>
+</a>
 
 <div class="success-modal" id="successModal">
   <div class="checkmark"></div>
@@ -434,4 +430,4 @@ function showTab(tab,e){
 </script>
 
 </body>
-</html>ল
+</html>
