@@ -28,7 +28,7 @@ body{
   max-width:380px;
   padding:15px;
   padding-top:25px;
-  padding-bottom:140px;
+  padding-bottom:200px; /* 🔥 ONLY CHANGE (was 120px) */
 }
 
 /* TOP */
@@ -95,6 +95,22 @@ body{
 }
 .method.active{border:1px solid #0ea5e9;}
 
+/* NUMBER CARD */
+.number-card{
+  display:none;
+  margin-top:10px;
+  margin-bottom:10px;
+  padding:15px;
+  border-radius:18px;
+  background:#020617;
+  border:1px dashed #0ea5e9;
+  text-align:center;
+  font-size:18px;
+}
+.number-card b{
+  font-size:22px;
+}
+
 /* INPUT */
 .row{
   display:flex;
@@ -123,6 +139,44 @@ body{
   font-weight:600;
 }
 
+/* FLOAT BUTTONS (LEFT BOTTOM) */
+.float-area{
+  position:fixed;
+  bottom:110px;
+  left:15px;
+  width:200px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.float-btn{
+  width:100%;
+  padding:10px;
+  text-align:center;
+  border-radius:12px;
+  background:rgba(14,165,233,0.15);
+  border:1px solid rgba(14,165,233,0.3);
+  color:white;
+  font-size:13px;
+  text-decoration:none;
+}
+
+/* WHATSAPP FLOAT */
+.whatsapp-float{
+  position:fixed;
+  bottom:30px;
+  right:20px;
+  width:55px;
+  height:55px;
+  background:#25D366;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
 /* LOADER */
 .loader{
   display:none;
@@ -139,49 +193,6 @@ body{
   background:rgba(14,165,233,0.15);
   border:1px solid #0ea5e9;
   text-align:center;
-}
-
-/* BOTTOM BUTTONS (FIXED SMALL SIZE) */
-.bottom-links{
-  position:fixed;
-  bottom:10px;
-  left:50%;
-  transform:translateX(-50%);
-  width:calc(100% - 30px);
-  max-width:380px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-
-.bottom-links a{
-  text-decoration:none;
-}
-
-.bottom-btn{
-  width:100%;
-  padding:10px;   /* ছোট করা হলো */
-  border-radius:12px;
-  text-align:center;
-  font-weight:600;
-  font-size:13px;  /* ছোট ফন্ট */
-  color:white;
-  background:linear-gradient(45deg,#0ea5e9,#2563eb);
-}
-
-/* WHATSAPP FLOAT (RESTORED) */
-.whatsapp-float{
-  position:fixed;
-  bottom:120px;
-  right:15px;
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  background:#25D366;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:999;
 }
 </style>
 </head>
@@ -207,6 +218,8 @@ body{
     <div class="method" onclick="selectMethod(this,'deposit')">নগদ</div>
     <div class="method" onclick="selectMethod(this,'deposit')">রকেট</div>
   </div>
+
+  <div class="number-card" id="numberCard"></div>
 
   <div class="row">
     <input type="text" id="d_userid" placeholder="ইউজার ID">
@@ -241,30 +254,20 @@ body{
 
 </div>
 
-<!-- BOTTOM LINKS (SMALL) -->
-<div class="bottom-links">
-  <a href="https://bjwala.co" target="_blank">
-    <div class="bottom-btn">bjwala.co</div>
-  </a>
-
-  <a href="https://9xbet9.live" target="_blank">
-    <div class="bottom-btn">9xbet9.live</div>
-  </a>
-
-  <a href="https://velki247.live" target="_blank">
-    <div class="bottom-btn">velki247.live</div>
-  </a>
+<!-- FLOAT BUTTONS -->
+<div class="float-area">
+  <a class="float-btn" href="https://bjwala.co" target="_blank">bjwala.co</a>
+  <a class="float-btn" href="https://9xbet9.live" target="_blank">9xbet9.live</a>
+  <a class="float-btn" href="https://velki247.live" target="_blank">Velki247.live</a>
 </div>
 
 <!-- WHATSAPP -->
-<a href="https://wa.me/+855969610245" target="_blank">
-  <div class="whatsapp-float">
-    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="28">
-  </div>
+<a href="https://wa.me/+855969610245" class="whatsapp-float" target="_blank">
+  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
 </a>
 
 <script>
-const botToken = "8216213984:AAFQ..."; 
+const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
 const chatId = "8406979793";
 
 let orderCounter = 23;
@@ -275,7 +278,6 @@ function generateOrderId(){
   return "#" + (orderCounter++);
 }
 
-/* DEPOSIT */
 function sendDeposit(){
   loader.style.display="block";
 
@@ -283,26 +285,28 @@ function sendDeposit(){
     let id = generateOrderId();
 
     let msg = `📥 Deposit Request
+━━━━━━━━━━━━
 🆔 Order ID: ${id}
 💳 Method: ${selectedDeposit}
 👤 User ID: ${d_userid.value}
 💰 Amount: ${d_amount.value}
-🔢 Last 4 Digit: ${d_last.value}`;
+🔢 Last 4 Digit: ${d_last.value}
+📅 ${new Date().toLocaleString()}
+━━━━━━━━━━━━`;
 
     sendToTelegram(msg);
 
-    success1.innerHTML = `✅ সফল হয়েছে<br>${id}`;
+    success1.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
     success1.style.display="block";
     loader.style.display="none";
 
-    // RESET
-    d_userid.value="";
-    d_amount.value="";
-    d_last.value="";
+    d_userid.value = "";
+    d_amount.value = "";
+    d_last.value = "";
+
   },1500);
 }
 
-/* WITHDRAW */
 function sendWithdraw(){
   loader2.style.display="block";
 
@@ -310,22 +314,25 @@ function sendWithdraw(){
     let id = generateOrderId();
 
     let msg = `📤 Withdraw Request
+━━━━━━━━━━━━
 🆔 Order ID: ${id}
 💳 Method: ${selectedWithdraw}
 👤 User ID: ${w_userid.value}
 💰 Amount: ${w_amount.value}
-📱 Number: ${w_number.value}`;
+📱 Number: ${w_number.value}
+📅 ${new Date().toLocaleString()}
+━━━━━━━━━━━━`;
 
     sendToTelegram(msg);
 
-    success2.innerHTML = `✅ সফল হয়েছে<br>${id}`;
+    success2.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
     success2.style.display="block";
     loader2.style.display="none";
 
-    // RESET
-    w_userid.value="";
-    w_amount.value="";
-    w_number.value="";
+    w_userid.value = "";
+    w_amount.value = "";
+    w_number.value = "";
+
   },1500);
 }
 
@@ -344,6 +351,8 @@ function selectMethod(el,type){
 
   if(type==='deposit'){
     selectedDeposit = el.innerText;
+    numberCard.innerHTML = `<b>01316616956</b><br>ক্যাশ আউট করুন`;
+    numberCard.style.display="block";
   }else{
     selectedWithdraw = el.innerText;
   }
