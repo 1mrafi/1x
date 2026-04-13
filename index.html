@@ -134,7 +134,6 @@ body{
   font-weight:600;
 }
 
-/* FLOAT AREA */
 .float-area{
   position: fixed;
   left: 15px;
@@ -143,7 +142,6 @@ body{
   flex-direction: column;
   gap: 8px;
   z-index: 9999;
-  transition: bottom 0.2s ease;
 }
 
 .site-card{
@@ -166,7 +164,10 @@ body{
   font-size:13px;
 }
 
-/* SUCCESS MODAL */
+/* ========================= */
+/* 🔥 PREMIUM SUCCESS MODAL */
+/* ========================= */
+
 .success-modal{
   position:fixed;
   top:50%;
@@ -270,18 +271,19 @@ body{
 
 </div>
 
-<!-- FLOAT AREA -->
+<!-- FLOAT -->
 <div class="float-area">
-
-  <div class="site-card" onclick="window.open('https://wa.me/855969610245','_blank')">
-    <b>WhatsApp</b>
-  </div>
-
   <div class="site-card" onclick="window.open('https://velki247.live','_blank')"><b>ভেল্কি</b></div>
   <div class="site-card" onclick="window.open('https://www.bjwala.co','_blank')"><b>বাজিওয়ালা</b></div>
   <div class="site-card" onclick="window.open('https://www.9xbet9.live/','_blank')"><b>9xBet</b></div>
+
+  <!-- ✅ শুধু এটা যোগ করা হয়েছে -->
+  <div class="site-card" onclick="window.open('https://wa.me/+855969610245','_blank')">
+    <b>আকাশ খান</b>
+  </div>
 </div>
 
+<!-- SUCCESS MODAL -->
 <div class="success-modal" id="successModal">
   <div class="checkmark"></div>
   <h3>সাকসেসফুল!</h3>
@@ -290,7 +292,7 @@ body{
 </div>
 
 <script>
-const botToken = "8216213984:AAFCOGsouGouXgnit2vKR6Rv8-VonSYL7_irk";
+const botToken = "8216213984:AAFCoGsouGouXgnit2vKR6Rv8-VonSYL7_irk";
 const chatId = "8406979793";
 
 let orderCounter = 23;
@@ -324,13 +326,7 @@ function sendDeposit(){
 ━━━━━━━━━━━━`;
 
   sendToTelegram(msg);
-
   showSuccess(id);
-
-  // RESET INPUTS
-  d_userid.value = "";
-  d_amount.value = "";
-  d_last.value = "";
 }
 
 function sendWithdraw(){
@@ -347,13 +343,7 @@ function sendWithdraw(){
 ━━━━━━━━━━━━`;
 
   sendToTelegram(msg);
-
   showSuccess(id);
-
-  // RESET INPUTS
-  w_userid.value = "";
-  w_amount.value = "";
-  w_number.value = "";
 }
 
 function sendToTelegram(message){
@@ -386,16 +376,6 @@ function showTab(tab,e){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   e.target.classList.add('active');
 }
-
-/* KEYBOARD FIX */
-function adjustFloating(){
-  if (!window.visualViewport) return;
-  const vh = window.visualViewport.height;
-  const offset = window.innerHeight - vh;
-  document.querySelector('.float-area').style.bottom = (offset + 20) + 'px';
-}
-
-window.visualViewport && window.visualViewport.addEventListener('resize', adjustFloating);
 </script>
 
 </body>
