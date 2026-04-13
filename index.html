@@ -9,9 +9,7 @@
 <style>
 *{box-sizing:border-box;}
 
-html,body{
-  height:100%;
-}
+html,body{height:100%;}
 
 body{
   margin:0;
@@ -20,7 +18,6 @@ body{
   color:white;
   display:flex;
   justify-content:center;
-  min-height:100vh;
 }
 
 .container{
@@ -31,15 +28,13 @@ body{
   padding-bottom:120px;
 }
 
+/* TOP NOTE */
 .top-note{
   overflow:hidden;
   background: rgba(14,165,233,0.15);
-  backdrop-filter: blur(10px);
-  border:1px solid rgba(255,255,255,0.1);
   border-radius:12px;
   margin-bottom:8px;
 }
-
 .top-note span{
   display:inline-block;
   padding:10px;
@@ -52,6 +47,7 @@ body{
   100%{transform:translateX(-100%);}
 }
 
+/* TABS */
 .tabs{
   display:flex;
   margin-bottom:8px;
@@ -59,7 +55,6 @@ body{
   border-radius:20px;
   padding:4px;
 }
-
 .tab{
   flex:1;
   padding:12px;
@@ -68,27 +63,25 @@ body{
   cursor:pointer;
   color:#94a3b8;
 }
-
 .tab.active{
   background:linear-gradient(45deg,#0ea5e9,#2563eb);
   color:white;
 }
 
+/* CARD */
 .card{
   background:rgba(2,6,23,0.9);
   padding:18px;
   border-radius:22px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.6);
-  border:1px solid rgba(255,255,255,0.05);
   margin-top:6px;
 }
 
+/* METHODS */
 .methods{
   display:flex;
   gap:8px;
   margin-bottom:12px;
 }
-
 .method{
   flex:1;
   padding:10px;
@@ -97,13 +90,11 @@ body{
   border-radius:14px;
   cursor:pointer;
 }
-
 .method.active{border:1px solid #0ea5e9;}
 
 .number-card{
   display:none;
   margin-top:10px;
-  margin-bottom:10px;
   padding:15px;
   border-radius:18px;
   background:#020617;
@@ -111,14 +102,13 @@ body{
   text-align:center;
 }
 
+/* INPUT */
 .row{
   display:flex;
   gap:8px;
 }
-
 .row input{
   flex:1;
-  min-width:0;
   padding:12px;
   border:none;
   border-radius:14px;
@@ -134,9 +124,9 @@ body{
   border:none;
   border-radius:16px;
   color:white;
-  font-weight:600;
 }
 
+/* FLOAT AREA */
 .float-area{
   position:fixed;
   bottom:110px;
@@ -147,36 +137,23 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
-  animation: floatUpDown 3s ease-in-out infinite;
-  z-index:999;
 }
 
-@keyframes floatUpDown{
-  0%{transform:translateX(-50%) translateY(0);}
-  50%{transform:translateX(-50%) translateY(-6px);}
-  100%{transform:translateX(-50%) translateY(0);}
-}
-
+/* LEFT SCROLL (UPDATED SAME AS TOP) */
 .left-btn{
-  background:linear-gradient(45deg,#0ea5e9,#2563eb);
-  padding:10px 15px;
-  border-radius:20px;
-  width:160px;
   overflow:hidden;
-  white-space:nowrap;
+  background: rgba(14,165,233,0.15);
+  border-radius:12px;
+  width:200px;
 }
-
-.ticker{
+.left-btn span{
   display:inline-block;
+  padding:10px;
   white-space:nowrap;
-  animation: scrollLoop 7s linear infinite;
+  animation:slide 10s linear infinite;
 }
 
-@keyframes scrollLoop{
-  0%{transform:translateX(0);}
-  100%{transform:translateX(-50%);}
-}
-
+/* WHATSAPP */
 .whatsapp{
   width:60px;
   height:60px;
@@ -185,6 +162,14 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
+  cursor:pointer;
+}
+
+/* LOADING */
+.loader{
+  display:none;
+  text-align:center;
+  margin-top:10px;
 }
 </style>
 </head>
@@ -220,17 +205,11 @@ body{
   </div>
 
   <button class="btn" onclick="sendDeposit()">সাবমিট</button>
+  <div class="loader" id="loader">⏳ Processing...</div>
 </div>
 
 <!-- Withdraw -->
 <div id="withdraw" class="card" style="display:none;">
-
-  <div class="methods">
-    <div class="method active">বিকাশ</div>
-    <div class="method">নগদ</div>
-    <div class="method">রকেট</div>
-  </div>
-
   <div class="row">
     <input type="text" id="w_userid" placeholder="ইউজার ID">
     <input type="number" id="w_amount" placeholder="টাকার পরিমাণ">
@@ -238,54 +217,70 @@ body{
   </div>
 
   <button class="btn" onclick="sendWithdraw()">সাবমিট</button>
+  <div class="loader" id="loader2">⏳ Processing...</div>
 </div>
 
 </div>
 
+<!-- FLOAT -->
 <div class="float-area">
   <div class="left-btn">
-    <div class="ticker">
-      বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ •
-    </div>
+    <span>বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ •</span>
   </div>
 
-  <div>
+  <a href="https://wa.me/+855969610245" target="_blank">
     <div class="whatsapp">
       <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
     </div>
-  </div>
+  </a>
 </div>
 
 <script>
-const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
-const chatId = "8406979793";
+const botToken = "YOUR_BOT_TOKEN";
+const chatId = "YOUR_CHAT_ID";
+
+let orderCounter = 23;
+
+function generateOrderId(){
+  return "#" + (orderCounter++);
+}
 
 function sendDeposit(){
-  let uid = document.getElementById("d_userid").value;
-  let amount = document.getElementById("d_amount").value;
-  let last = document.getElementById("d_last").value;
+  document.getElementById("loader").style.display="block";
 
-  let msg = `📥 Deposit Request
-🆔 User ID: ${uid}
-💰 Amount: ${amount}
-🔢 Last 4 Digit: ${last}
+  setTimeout(()=>{
+    let orderId = generateOrderId();
+
+    let msg = `📥 Deposit Request
+🆔 Order ID: ${orderId}
+🆔 User ID: ${d_userid.value}
+💰 Amount: ${d_amount.value}
+🔢 Last 4 Digit: ${d_last.value}
 📅 ${new Date().toLocaleString()}`;
 
-  sendToTelegram(msg);
+    sendToTelegram(msg);
+    alert("✅ Order Placed\nOrder ID: " + orderId);
+    document.getElementById("loader").style.display="none";
+  },2000);
 }
 
 function sendWithdraw(){
-  let uid = document.getElementById("w_userid").value;
-  let amount = document.getElementById("w_amount").value;
-  let number = document.getElementById("w_number").value;
+  document.getElementById("loader2").style.display="block";
 
-  let msg = `📤 Withdraw Request
-🆔 User ID: ${uid}
-💰 Amount: ${amount}
-📱 Number: ${number}
+  setTimeout(()=>{
+    let orderId = generateOrderId();
+
+    let msg = `📤 Withdraw Request
+🆔 Order ID: ${orderId}
+🆔 User ID: ${w_userid.value}
+💰 Amount: ${w_amount.value}
+📱 Number: ${w_number.value}
 📅 ${new Date().toLocaleString()}`;
 
-  sendToTelegram(msg);
+    sendToTelegram(msg);
+    alert("✅ Withdraw Placed\nOrder ID: " + orderId);
+    document.getElementById("loader2").style.display="none";
+  },2000);
 }
 
 function sendToTelegram(message){
@@ -296,18 +291,17 @@ function sendToTelegram(message){
       chat_id:chatId,
       text:message
     })
-  })
-  .then(()=>alert("✅ Sent Successfully"))
-  .catch(()=>alert("❌ Failed"));
+  });
 }
 
 function selectMethod(el){
   document.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
   el.classList.add('active');
 
-  let text = el.innerText + " নাম্বার<br><b>01316616956</b>";
-  document.getElementById('numberCard').innerHTML = text;
-  document.getElementById('numberCard').style.display = 'block';
+  document.getElementById('numberCard').innerHTML =
+    el.innerText + " নাম্বার<br><b>01316616956</b>";
+
+  document.getElementById('numberCard').style.display='block';
 }
 
 function showTab(tab,e){
