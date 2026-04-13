@@ -23,14 +23,6 @@ body{
   justify-content:center;
 }
 
-/* ========================= */
-/* 🔥 BLUR EFFECT ADD        */
-/* ========================= */
-.blur{
-  filter: blur(6px);
-  pointer-events:none;
-}
-
 .container{
   width:100%;
   max-width:380px;
@@ -163,14 +155,18 @@ body{
   text-align:center;
   font-size:12px;
   cursor:pointer;
+
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
 }
-.site-card b{font-size:13px;}
 
-/* WHATSAPP */
+.site-card b{
+  font-size:13px;
+}
+
+/* WHATSAPP FLOAT */
 .float-whatsapp{
   position: fixed;
   right: 15px;
@@ -188,6 +184,7 @@ body{
   border-radius:10px;
   background:rgba(37,211,102,0.15);
   border:1px solid rgba(37,211,102,0.4);
+  color:white;
 }
 
 .float-whatsapp a{
@@ -199,11 +196,13 @@ body{
   align-items:center;
   justify-content:center;
   text-decoration:none;
+  box-shadow:0 5px 15px rgba(0,0,0,0.3);
 }
 
 /* ========================= */
-/* 🎉 SUCCESS MODAL          */
+/* ✅ SUCCESS MODAL ADD      */
 /* ========================= */
+
 .success-modal{
   position:fixed;
   top:50%;
@@ -228,7 +227,7 @@ body{
   border:3px solid #22c55e;
   margin:0 auto 15px auto;
   position:relative;
-  animation:pop 0.5s ease;
+  animation:pop 0.4s ease;
 }
 
 .checkmark:after{
@@ -266,8 +265,8 @@ body{
 </div>
 
 <div class="tabs">
-  <div class="tab active" onclick="showTab('deposit', event)">Deposit</div>
-  <div class="tab" onclick="showTab('withdraw', event)">Withdraw</div>
+  <div class="tab active">Deposit</div>
+  <div class="tab">Withdraw</div>
 </div>
 
 <div id="deposit" class="card">
@@ -306,7 +305,7 @@ body{
 
 </div>
 
-<!-- FLOATS (UNCHANGED) -->
+<!-- FLOAT -->
 <div class="float-area">
   <div class="site-card" onclick="window.open('https://velki247.live','_blank')"><b>ভেল্কি</b></div>
   <div class="site-card" onclick="window.open('https://www.bjwala.co','_blank')"><b>বাজিওয়ালা</b></div>
@@ -318,11 +317,13 @@ body{
   <a href="https://wa.me/855969610245" target="_blank"></a>
 </div>
 
-<!-- SUCCESS MODAL -->
+<!-- ========================= -->
+<!-- SUCCESS MODAL HTML       -->
+<!-- ========================= -->
 <div class="success-modal" id="successModal">
   <div class="checkmark"></div>
   <h3>সাকসেসফুল!</h3>
-  <div id="orderText"></div>
+  <div>আপনার রিকোয়েস্ট সফল হয়েছে</div>
   <div class="order-id" id="orderId"></div>
 </div>
 
@@ -331,27 +332,23 @@ function generateOrderID(){
   return "ORD-" + Math.floor(100000 + Math.random()*900000);
 }
 
-function showSuccess(id){
-  document.getElementById("orderText").innerText = "আপনার রিকোয়েস্ট সফল হয়েছে";
-  document.getElementById("orderId").innerText = "Order ID: " + id;
+function showSuccess(){
+  let id = generateOrderID();
 
+  document.getElementById("orderId").innerText = "Order ID: " + id;
   document.getElementById("successModal").style.display = "block";
-  document.getElementById("mainContent").classList.add("blur");
 
   setTimeout(()=>{
     document.getElementById("successModal").style.display = "none";
-    document.getElementById("mainContent").classList.remove("blur");
   },3000);
 }
 
 function sendDeposit(){
-  let id = generateOrderID();
-  showSuccess(id);
+  showSuccess();
 }
 
 function sendWithdraw(){
-  let id = generateOrderID();
-  showSuccess(id);
+  showSuccess();
 }
 </script>
 
